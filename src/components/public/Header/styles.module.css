@@ -91,6 +91,24 @@
   background: rgba(255, 107, 53, 0.08);
 }
 
+.langToggle {
+  background: transparent;
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 6px;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.langToggle:hover {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
 .menuButton {
   display: none;
   background: transparent;

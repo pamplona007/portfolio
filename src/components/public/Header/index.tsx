@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import { Menu, X, Github, Linkedin, Mail } from 'lucide-react';
 import styles from './styles.module.css';
 
@@ -14,6 +15,12 @@ export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
+  const { i18n } = useTranslation();
+  const currentLang = i18n.language;
+
+  const toggleLang = () => {
+    i18n.changeLanguage(currentLang === 'en' ? 'pt' : 'en');
+  };
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -45,6 +52,9 @@ export function Header() {
         </nav>
 
         <div className={styles.social}>
+          <button onClick={toggleLang} className={styles.langToggle} aria-label="Toggle language">
+            {currentLang === 'en' ? '🇧🇷 PT' : '🇬🇧 EN'}
+          </button>
           <a href="https://github.com/lucaspamplona" target="_blank" rel="noopener noreferrer" aria-label="GitHub" className={styles.socialLink}>
             <Github size={18} />
           </a>
