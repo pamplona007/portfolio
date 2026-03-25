@@ -15,6 +15,7 @@ const AboutEditor = React.lazy(() => import('./pages/admin/AboutEditor'));
 const ProjectsEditor = React.lazy(() => import('./pages/admin/ProjectsEditor'));
 const ContactSubmissions = React.lazy(() => import('./pages/admin/ContactSubmissions'));
 const Settings = React.lazy(() => import('./pages/admin/Settings'));
+const SkillsEditor = React.lazy(() => import('./components/admin/SkillsEditor'));
 
 // Layouts
 import { PublicLayout } from './components/public/Layout';
@@ -61,6 +62,7 @@ export default function App() {
           <Route path="projects" element={<ProjectsEditor />} />
           <Route path="contact" element={<ContactSubmissions />} />
           <Route path="settings" element={<Settings />} />
+          <Route path="skills" element={<SkillsEditor />} />
         </Route>
       </Routes>
     </React.Suspense>

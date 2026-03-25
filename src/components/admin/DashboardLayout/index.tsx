@@ -9,6 +9,7 @@ import {
   LogOut,
   Menu,
   X,
+  Star,
 } from 'lucide-react';
 import { supabase } from '@/services/supabase';
 import styles from './styles.module.css';
@@ -19,6 +20,7 @@ const navItems = [
   { to: '/dashboard/projects', icon: FolderOpen, label: 'Projects' },
   { to: '/dashboard/contact', icon: Mail, label: 'Contact' },
   { to: '/dashboard/settings', icon: Settings, label: 'Settings' },
+  { to: '/dashboard/skills', icon: Star, label: 'Skills' },
 ];
 
 export function DashboardLayout() {
