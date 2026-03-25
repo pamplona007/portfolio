@@ -1,14 +1,26 @@
+// Localized string: { en: "...", pt: "..." }
+export type LocalizedString = Record<string, string>;
+
+// Fallback helper
+export function getLocalized(value: string | LocalizedString | null | undefined, lang: string): string {
+  if (typeof value === 'object' && value !== null) {
+    return value[lang] ?? value.en ?? '';
+  }
+  return typeof value === 'string' ? value : '';
+}
+
 // Profile
 export interface Profile {
   id: string;
-  name: string;
-  title: string;
-  tagline: string | null;
-  bio: string | null;
+  name: LocalizedString;
+  title: LocalizedString;
+  tagline: LocalizedString | null;
+  bio: LocalizedString | null;
   socialGithub: string | null;
   socialLinkedin: string | null;
   socialEmail: string | null;
-  metaDescription: string | null;
+  metaDescription: LocalizedString | null;
+  language: string;
   theme: string;
   createdAt: string;
   updatedAt: string;
@@ -17,12 +29,12 @@ export interface Profile {
 // Experience
 export interface Experience {
   id: string;
-  company: string;
-  role: string;
+  company: LocalizedString;
+  role: LocalizedString;
   startDate: string;
   endDate: string | null;
   current: boolean;
-  description: string | null;
+  description: LocalizedString | null;
   sortOrder: number;
   createdAt: string;
 }
@@ -30,9 +42,9 @@ export interface Experience {
 // Education
 export interface Education {
   id: string;
-  school: string;
-  degree: string;
-  field: string;
+  school: LocalizedString;
+  degree: LocalizedString;
+  field: LocalizedString;
   startDate: string;
   endDate: string | null;
   createdAt: string;
@@ -41,16 +53,16 @@ export interface Education {
 // Skill
 export interface Skill {
   id: string;
-  name: string;
+  name: LocalizedString;
   category: 'frontend' | 'backend' | 'devops' | 'tools';
 }
 
 // Project
 export interface Project {
   id: string;
-  title: string;
+  title: LocalizedString;
   slug: string;
-  description: string;
+  description: LocalizedString;
   techStack: string[];
   liveUrl: string | null;
   repoUrl: string | null;
