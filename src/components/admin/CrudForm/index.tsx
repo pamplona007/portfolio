@@ -1,7 +1,7 @@
 import { useForm, Path } from 'react-hook-form';
+import { forwardRef, useImperativeHandle } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { useEffect } from 'react';
 import styles from './styles.module.css';
 
 interface FieldConfig {
@@ -11,6 +11,10 @@ interface FieldConfig {
   placeholder?: string;
   options?: { value: string; label: string }[];
   rows?: number;
+}
+
+export interface CrudFormRef {
+  getValues: () => Record<string, unknown>;
 }
 
 interface CrudFormProps<T extends z.ZodType> {
@@ -24,84 +28,88 @@ interface CrudFormProps<T extends z.ZodType> {
   formKey?: string;
 }
 
-export function CrudForm<T extends z.ZodType>({
-  schema,
-  defaultValues,
-  fields,
-  onSubmit,
-  onCancel,
-  submitLabel = 'Save',
-  children,
-  formKey,
-}: CrudFormProps<T>) {
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors, isSubmitting },
-  } = useForm({
-    resolver: zodResolver(schema),
-    defaultValues,
-  });
+export const CrudForm = forwardRef<CrudFormRef, CrudFormProps<z.ZodType>>(
+  function CrudForm<T extends z.ZodType>(
+    {
+      schema,
+      defaultValues,
+      fields,
+      onSubmit,
+      onCancel,
+      submitLabel = 'Save',
+      children,
+    },
+    ref
+  ) {
+    const {
+      register,
+      handleSubmit,
+      getValues,
+      formState: { errors, isSubmitting },
+    } = useForm({
+      resolver: zodResolver(schema),
+      defaultValues,
+    });
 
-  useEffect(() => {
-    reset(defaultValues);
-  }, [formKey, defaultValues, reset]);
+    useImperativeHandle(ref, () => ({
+      getValues: () => getValues(),
+    }));
 
-  return (
-    <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
-      {fields.map((field) => (
-        <div key={field.name} className={styles.field}>
-          <label htmlFor={field.name} className={styles.label}>
-            {field.label}
-          </label>
-          {field.type === 'textarea' ? (
-            <textarea
-              id={field.name}
-              rows={field.rows ?? 4}
-              className={`${styles.textarea} ${errors[field.name as keyof z.infer<T>] ? styles.inputError : ''}`}
-              placeholder={field.placeholder}
-              {...register(field.name as Path<z.infer<T>>)}
-            />
-          ) : field.type === 'select' ? (
-            <select
-              id={field.name}
-              className={`${styles.select} ${errors[field.name as keyof z.infer<T>] ? styles.inputError : ''}`}
-              {...register(field.name as Path<z.infer<T>>)}
-            >
-              {field.options?.map((opt) => (
-                <option key={opt.value} value={opt.value}>
-                  {opt.label}
-                </option>
-              ))}
-            </select>
-          ) : (
-            <input
-              id={field.name}
-              type={field.type ?? 'text'}
-              className={`${styles.input} ${errors[field.name as keyof z.infer<T>] ? styles.inputError : ''}`}
-              placeholder={field.placeholder}
-              {...register(field.name as Path<z.infer<T>>)}
-            />
+    return (
+      <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
+        {fields.map((field) => (
+          <div key={field.name} className={styles.field}>
+            <label htmlFor={field.name} className={styles.label}>
+              {field.label}
+            </label>
+            {field.type === 'textarea' ? (
+              <textarea
+                id={field.name}
+                rows={field.rows ?? 4}
+                className={`${styles.textarea} ${errors[field.name as Path<z.infer<T>>] ? styles.inputError : ''}`}
+                placeholder={field.placeholder}
+                {...register(field.name as Path<z.infer<T>>)}
+              />
+            ) : field.type === 'select' ? (
+              <select
+                id={field.name}
+                className={`${styles.select} ${errors[field.name as Path<z.infer<T>>] ? styles.inputError : ''}`}
+                {...register(field.name as Path<z.infer<T>>)}
+              >
+                {field.options?.map((opt) => (
+                  <option key={opt.value} value={opt.value}>
+                    {opt.label}
+                  </option>
+                ))}
+              </select>
+            ) : (
+              <input
+                id={field.name}
+                type={field.type ?? 'text'}
+                className={`${styles.input} ${errors[field.name as Path<z.infer<T>>] ? styles.inputError : ''}`}
+                placeholder={field.placeholder}
+                {...register(field.name as Path<z.infer<T>>)}
+              />
+            )}
+            {errors[field.name as Path<z.infer<T>>] && (
+              <span className={styles.error}>{String(errors[field.name as Path<z.infer<T>>]?.message)}</span>
+            )}
+          </div>
+        ))}
+
+        {children}
+
+        <div className={styles.actions}>
+          {onCancel && (
+            <button type="button" className={styles.cancelBtn} onClick={onCancel}>
+              Cancel
+            </button>
           )}
-          {errors[field.name as keyof z.infer<T>] && (
-            <span className={styles.error}>{String(errors[field.name as keyof z.infer<T>]?.message)}</span>
-          )}
-        </div>
-      ))}
-
-      {children}
-
-      <div className={styles.actions}>
-        {onCancel && (
-          <button type="button" className={styles.cancelBtn} onClick={onCancel}>
-            Cancel
+          <button type="submit" className={styles.submitBtn} disabled={isSubmitting}>
+            {isSubmitting ? 'Saving...' : submitLabel}
           </button>
-        )}
-        <button type="submit" className={styles.submitBtn} disabled={isSubmitting}>
-          {isSubmitting ? 'Saving...' : submitLabel}
-        </button>
-      </div>
-    </form>
-  );
-}
+        </div>
+      </form>
+    );
+  }
+);

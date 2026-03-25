@@ -1,8 +1,5 @@
-import { useState } from 'react';
-import { useForm, Path } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { z } from 'zod';
-import { CrudForm } from '@/components/admin/CrudForm';
+import { useState, useRef } from 'react';
+import { CrudForm, CrudFormRef } from '@/components/admin/CrudForm';
 import type { ZodType } from 'zod';
 import styles from './styles.module.css';
 
@@ -41,14 +38,21 @@ export function TabbedTranslatableForm<T extends ZodType>({
 }: TabbedTranslatableFormProps<T>) {
   const [activeLang, setActiveLang] = useState<Language>('en');
   const [formKey, setFormKey] = useState(activeLang);
+  const formRef = useRef<CrudFormRef>(null);
 
   const handleTabSwitch = (newLang: Language) => {
     if (newLang === activeLang) return;
+
+    const currentValues = formRef.current?.getValues();
+    if (currentValues) {
+      onLocalizedDataChange({ ...localizedData, [activeLang]: currentValues });
+    }
+
     setActiveLang(newLang);
     setFormKey(newLang);
   };
 
-  const handleSubmit = async (data: Record<string, unknown>) => {
+  const handleSubmit = (data: Record<string, unknown>) => {
     onSubmit(data, activeLang);
   };
 
@@ -65,18 +69,19 @@ export function TabbedTranslatableForm<T extends ZodType>({
           className={`${styles.tab} ${activeLang === 'en' ? styles.active : ''}`}
           onClick={() => handleTabSwitch('en')}
         >
-          EN English
+          🇬🇧 English
         </button>
         <button
           type="button"
           className={`${styles.tab} ${activeLang === 'pt' ? styles.active : ''}`}
           onClick={() => handleTabSwitch('pt')}
         >
-          PT Portugues
+          🇧🇷 Português
         </button>
       </div>
       <div className={styles.content}>
         <CrudForm
+          ref={formRef}
           key={formKey}
           schema={schema}
           defaultValues={localizedData[activeLang] ?? defaultValues}
