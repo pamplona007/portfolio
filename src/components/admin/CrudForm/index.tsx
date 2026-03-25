@@ -1,6 +1,7 @@
 import { useForm, Path } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
+import { useEffect } from 'react';
 import styles from './styles.module.css';
 
 interface FieldConfig {
@@ -20,6 +21,7 @@ interface CrudFormProps<T extends z.ZodType> {
   onCancel?: () => void;
   submitLabel?: string;
   children?: React.ReactNode;
+  formKey?: string;
 }
 
 export function CrudForm<T extends z.ZodType>({
@@ -30,15 +32,21 @@ export function CrudForm<T extends z.ZodType>({
   onCancel,
   submitLabel = 'Save',
   children,
+  formKey,
 }: CrudFormProps<T>) {
   const {
     register,
     handleSubmit,
+    reset,
     formState: { errors, isSubmitting },
   } = useForm({
     resolver: zodResolver(schema),
     defaultValues,
   });
+
+  useEffect(() => {
+    reset(defaultValues);
+  }, [formKey, defaultValues, reset]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
