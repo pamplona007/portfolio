@@ -1,9 +1,11 @@
 import { useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight, Github, Linkedin, Mail } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/public/Button';
 import { useProfile } from '@/hooks/useProfile';
 import { trackPageView } from '@/services/analytics';
+import { getLocalized } from '@/types';
 import styles from './styles.module.css';
 
 const defaultProfile = {
@@ -31,6 +33,8 @@ function useScrollReveal() {
 }
 
 export default function Home() {
+  const { i18n } = useTranslation();
+  const lang = i18n.language;
   const { profile, loading } = useProfile();
   const statsRef = useScrollReveal();
   const ctaRef = useScrollReveal();
@@ -40,9 +44,9 @@ export default function Home() {
     trackPageView('/');
   }, []);
 
-  const name = profile?.name ?? defaultProfile.name;
-  const title = profile?.title ?? defaultProfile.title;
-  const tagline = profile?.tagline ?? defaultProfile.tagline;
+  const name = getLocalized(profile?.name, lang) ?? defaultProfile.name;
+  const title = getLocalized(profile?.title, lang) ?? defaultProfile.title;
+  const tagline = getLocalized(profile?.tagline, lang) ?? defaultProfile.tagline;
   const github = profile?.socialGithub ?? defaultProfile.github;
   const linkedin = profile?.socialLinkedin ?? defaultProfile.linkedin;
   const email = profile?.socialEmail ?? defaultProfile.email;

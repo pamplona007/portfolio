@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 import { Send, Github, Linkedin, Mail, CheckCircle } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/public/Button';
 import { useContact } from '@/hooks/useContact';
 import { trackPageView } from '@/services/analytics';
@@ -32,6 +33,7 @@ const contactSchema = z.object({
 type ContactForm = z.infer<typeof contactSchema>;
 
 export default function Contact() {
+  const { t } = useTranslation();
   const [submitted, setSubmitted] = useState(false);
   const [serverError, setServerError] = useState<string | null>(null);
   const formRef = useScrollReveal();
@@ -70,12 +72,12 @@ export default function Contact() {
             <div className={styles.successIcon}>
               <CheckCircle size={40} />
             </div>
-            <h2 className={styles.successTitle}>Message sent!</h2>
+            <h2 className={styles.successTitle}>{t('contact.successTitle')}</h2>
             <p className={styles.successText}>
-              Thanks for reaching out. I'll get back to you as soon as possible.
+              {t('contact.successText')}
             </p>
             <Button variant="ghost" onClick={() => setSubmitted(false)}>
-              Send another message
+              {t('contact.anotherMessage')}
             </Button>
           </div>
         </div>
@@ -90,46 +92,46 @@ export default function Contact() {
           {/* Form */}
           <div ref={formRef} className={`${styles.formSection} reveal`}>
             <h1 className={styles.heading}>
-              Get in <span className="gradient-text">Touch</span>
+              {t('contact.title')}
             </h1>
             <p className={styles.subheading}>
-              Have a project in mind or just want to chat? Drop me a message.
+              {t('contact.subtitle')}
             </p>
 
             <form onSubmit={handleSubmit(onSubmit)} className={styles.form} noValidate>
               <div className={styles.field}>
-                <label htmlFor="name" className={styles.label}>Name</label>
+                <label htmlFor="name" className={styles.label}>{t('contact.name')}</label>
                 <input
                   id="name"
                   type="text"
                   autoComplete="name"
                   className={`${styles.input} ${errors.name ? styles.inputError : ''}`}
-                  placeholder="Your name"
+                  placeholder={t('contact.namePlaceholder')}
                   {...register('name')}
                 />
                 {errors.name && <span className={styles.error}>{errors.name.message}</span>}
               </div>
 
               <div className={styles.field}>
-                <label htmlFor="email" className={styles.label}>Email</label>
+                <label htmlFor="email" className={styles.label}>{t('contact.email')}</label>
                 <input
                   id="email"
                   type="email"
                   autoComplete="email"
                   className={`${styles.input} ${errors.email ? styles.inputError : ''}`}
-                  placeholder="you@example.com"
+                  placeholder={t('contact.emailPlaceholder')}
                   {...register('email')}
                 />
                 {errors.email && <span className={styles.error}>{errors.email.message}</span>}
               </div>
 
               <div className={styles.field}>
-                <label htmlFor="message" className={styles.label}>Message</label>
+                <label htmlFor="message" className={styles.label}>{t('contact.message')}</label>
                 <textarea
                   id="message"
                   rows={6}
                   className={`${styles.textarea} ${errors.message ? styles.inputError : ''}`}
-                  placeholder="Tell me about your project..."
+                  placeholder={t('contact.messagePlaceholder')}
                   {...register('message')}
                 />
                 {errors.message && <span className={styles.error}>{errors.message.message}</span>}
@@ -139,16 +141,16 @@ export default function Contact() {
 
               <Button type="submit" variant="primary" size="lg" loading={loading}>
                 <Send size={16} />
-                Send Message
+                {t('contact.send')}
               </Button>
             </form>
           </div>
 
           {/* Info Panel */}
           <div ref={infoRef} className={`${styles.infoPanel} reveal`} style={{ animationDelay: '150ms' }}>
-            <h3 className={styles.infoTitle}>Other ways to reach me</h3>
+            <h3 className={styles.infoTitle}>{t('contact.infoTitle')}</h3>
             <p className={styles.infoText}>
-              Prefer a more direct approach? Find me on GitHub, LinkedIn, or send an email.
+              {t('contact.infoText')}
             </p>
             <div className={styles.infoLinks}>
               <a href="https://github.com/lucaspamplona" target="_blank" rel="noopener noreferrer" className={styles.infoLink}>

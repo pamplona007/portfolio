@@ -1,10 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
 import { ExternalLink, Github } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { Card } from '@/components/public/Card';
 import { Badge } from '@/components/public/Badge';
 import { Button } from '@/components/public/Button';
 import { useProjects } from '@/hooks/useProjects';
 import { trackPageView } from '@/services/analytics';
+import { getLocalized } from '@/types';
 import styles from './styles.module.css';
 
 function useScrollReveal() {
@@ -23,6 +25,8 @@ function useScrollReveal() {
 }
 
 export default function Projects() {
+  const { i18n, t } = useTranslation();
+  const lang = i18n.language;
   const { projects, loading } = useProjects('active');
   const [filter, setFilter] = useState<string | null>(null);
   const headerRef = useScrollReveal();
@@ -44,16 +48,16 @@ export default function Projects() {
       <div className={styles.container}>
         <div ref={headerRef} className={`${styles.header} reveal`}>
           <h1 className={styles.heading}>
-            My <span className="gradient-text">Projects</span>
+            {t('projects.title')}
           </h1>
           <p className={styles.subheading}>
-            A selection of things I've built — from side projects to production systems.
+            {t('projects.subtitle')}
           </p>
         </div>
 
         <div ref={filtersRef} className={`${styles.filters} reveal`}>
           <Button variant={filter === null ? 'primary' : 'ghost'} size="sm" onClick={() => setFilter(null)}>
-            All
+            {t('projects.all')}
           </Button>
           {allTechs.map((tech) => (
             <Button key={tech} variant={filter === tech ? 'primary' : 'ghost'} size="sm" onClick={() => setFilter(tech)}>
@@ -67,7 +71,7 @@ export default function Projects() {
             <Card key={project.id} className={styles.projectCard}>
               <div className={styles.cardInner} style={{ animationDelay: `${i * 80}ms` }}>
                 <div className={styles.cardTop}>
-                  <h3 className={styles.projectTitle}>{project.title}</h3>
+                  <h3 className={styles.projectTitle}>{getLocalized(project.title, lang)}</h3>
                   <div className={styles.links}>
                     {project.repoUrl && (
                       <a href={project.repoUrl} target="_blank" rel="noopener noreferrer" aria-label="Repository" className={styles.linkIcon}>
@@ -81,7 +85,7 @@ export default function Projects() {
                     )}
                   </div>
                 </div>
-                <p className={styles.description}>{project.description}</p>
+                <p className={styles.description}>{getLocalized(project.description, lang)}</p>
                 <div className={styles.techStack}>
                   {project.techStack.map((tech) => <Badge key={tech}>{tech}</Badge>)}
                 </div>

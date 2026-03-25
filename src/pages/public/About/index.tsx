@@ -1,8 +1,10 @@
 import { useEffect, useRef } from 'react';
 import { Briefcase, GraduationCap, Code } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { SkillChip } from '@/components/public/SkillChip';
 import { useAboutData } from '@/hooks/useAboutData';
 import { trackPageView } from '@/services/analytics';
+import { getLocalized } from '@/types';
 import styles from './styles.module.css';
 
 function useScrollReveal() {
@@ -21,6 +23,8 @@ function useScrollReveal() {
 }
 
 export default function About() {
+  const { i18n } = useTranslation();
+  const lang = i18n.language;
   const { profile, experiences, education, skills } = useAboutData();
   const headerRef = useScrollReveal();
   const skillsRef = useScrollReveal();
@@ -30,11 +34,12 @@ export default function About() {
     trackPageView('/about');
   }, []);
 
-  const bio = profile?.bio ?? 'Senior Full-Stack Developer with 8+ years of experience building web applications and REST APIs.';
+  const bio = getLocalized(profile?.bio, lang) ?? 'Senior Full-Stack Developer with 8+ years of experience building web applications and REST APIs.';
 
-  const formatPeriod = (startDate: string, endDate: string | null, current: boolean) => {
+  const formatPeriod = (startDate: string, endDate: string | null, current: boolean, lang: string) => {
     const start = new Date(startDate).getFullYear();
-    const end = current ? 'Present' : endDate ? new Date(endDate).getFullYear() : '';
+    const presentLabel = lang === 'pt' ? 'Atual' : 'Present';
+    const end = current ? presentLabel : endDate ? new Date(endDate).getFullYear() : '';
     return `${start} — ${end}`;
   };
 
@@ -60,7 +65,7 @@ export default function About() {
             </h2>
             <div className={styles.skillsGrid}>
               {skills.map((skill) => (
-                <SkillChip key={skill.id} name={skill.name} category={skill.category} />
+                <SkillChip key={skill.id} name={getLocalized(skill.name, lang)} category={skill.category} />
               ))}
             </div>
           </section>
@@ -80,14 +85,14 @@ export default function About() {
                   <div className={styles.timelineCard}>
                     <div className={styles.timelineHeader}>
                       <div>
-                        <h3 className={styles.role}>{exp.role}</h3>
-                        <p className={styles.company}>{exp.company}</p>
+                        <h3 className={styles.role}>{getLocalized(exp.role, lang)}</h3>
+                        <p className={styles.company}>{getLocalized(exp.company, lang)}</p>
                       </div>
                       <span className={styles.period}>
-                        {formatPeriod(exp.startDate, exp.endDate, exp.current)}
+                        {formatPeriod(exp.startDate, exp.endDate, exp.current, lang)}
                       </span>
                     </div>
-                    {exp.description && <p className={styles.description}>{exp.description}</p>}
+                    {exp.description && <p className={styles.description}>{getLocalized(exp.description, lang)}</p>}
                   </div>
                 </div>
               ))}
@@ -109,11 +114,11 @@ export default function About() {
                   <div className={styles.timelineCard}>
                     <div className={styles.timelineHeader}>
                       <div>
-                        <h3 className={styles.role}>{edu.degree}</h3>
-                        <p className={styles.company}>{edu.school}</p>
+                        <h3 className={styles.role}>{getLocalized(edu.degree, lang)}</h3>
+                        <p className={styles.company}>{getLocalized(edu.school, lang)}</p>
                       </div>
                       <span className={styles.period}>
-                        {formatPeriod(edu.startDate, edu.endDate, false)}
+                        {formatPeriod(edu.startDate, edu.endDate, false, lang)}
                       </span>
                     </div>
                   </div>
