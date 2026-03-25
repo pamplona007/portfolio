@@ -16,7 +16,8 @@
     "skills": "Habilidades",
     "experience": "Experiência",
     "education": "Educação",
-    "present": "Atual"
+    "present": "Atual",
+    "aboutMe": "Sobre Mim"
   },
   "projects": {
     "title": "Meus Projetos",

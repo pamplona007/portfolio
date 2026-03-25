@@ -23,7 +23,7 @@ function useScrollReveal() {
 }
 
 export default function About() {
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
   const lang = i18n.language;
   const { profile, experiences, education, skills } = useAboutData();
   const headerRef = useScrollReveal();
@@ -49,7 +49,7 @@ export default function About() {
         {/* Header */}
         <div ref={headerRef} className={`${styles.header} reveal`}>
           <h1 className={styles.heading}>
-            About <span className="gradient-text">Me</span>
+            <span className="gradient-text">{t('about.aboutMe')}</span>
           </h1>
           <div className={styles.bioGrid}>
             <p className={styles.bio}>{bio}</p>
@@ -61,7 +61,7 @@ export default function About() {
           <section ref={skillsRef} className={`${styles.section} reveal`}>
             <h2 className={styles.sectionTitle}>
               <Code size={18} />
-              Skills
+              {t('about.skills')}
             </h2>
             <div className={styles.skillsGrid}>
               {skills.map((skill) => (
@@ -76,7 +76,7 @@ export default function About() {
           <section ref={expRef} className={`${styles.section} reveal`}>
             <h2 className={styles.sectionTitle}>
               <Briefcase size={18} />
-              Experience
+              {t('about.experience')}
             </h2>
             <div className={styles.timeline}>
               {experiences.map((exp) => (
@@ -105,7 +105,7 @@ export default function About() {
           <section className={`${styles.section} reveal`}>
             <h2 className={styles.sectionTitle}>
               <GraduationCap size={18} />
-              Education
+              {t('about.education')}
             </h2>
             <div className={styles.timeline}>
               {education.map((edu) => (

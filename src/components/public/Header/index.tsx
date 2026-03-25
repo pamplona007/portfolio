@@ -4,19 +4,19 @@ import { useTranslation } from 'react-i18next';
 import { Menu, X, Github, Linkedin, Mail } from 'lucide-react';
 import styles from './styles.module.css';
 
-const navLinks = [
-  { href: '/', label: 'Home' },
-  { href: '/about', label: 'About' },
-  { href: '/projects', label: 'Projects' },
-  { href: '/contact', label: 'Contact' },
-];
-
 export function Header() {
   const [scrolled, setScrolled] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
-  const { i18n } = useTranslation();
+  const { i18n, t } = useTranslation();
   const currentLang = i18n.language;
+
+  const navLinks = [
+    { href: '/', label: t('nav.home') },
+    { href: '/about', label: t('nav.about') },
+    { href: '/projects', label: t('nav.projects') },
+    { href: '/contact', label: t('nav.contact') },
+  ];
 
   const toggleLang = () => {
     i18n.changeLanguage(currentLang === 'en' ? 'pt' : 'en');

@@ -96,7 +96,7 @@ export default function Projects() {
 
         {filtered.length === 0 && !loading && (
           <div className={styles.empty}>
-            <p>No projects match the selected filter.</p>
+            <p>{t('projects.noResults')}</p>
           </div>
         )}
       </div>

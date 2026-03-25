@@ -77,7 +77,7 @@ export default function Contact() {
               {t('contact.successText')}
             </p>
             <Button variant="ghost" onClick={() => setSubmitted(false)}>
-              {t('contact.anotherMessage')}
+              {t('contact.sendAnother')}
             </Button>
           </div>
         </div>

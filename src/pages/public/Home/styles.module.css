@@ -2,6 +2,13 @@
   animation: fadeIn var(--transition-slow) both;
 }
 
+.container {
+  max-width: var(--max-width-wide);
+  margin: 0 auto;
+  padding: 0 var(--space-6);
+  width: 100%;
+}
+
 .hero {
   min-height: calc(100vh - 180px);
   display: flex;

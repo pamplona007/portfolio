@@ -33,7 +33,7 @@ function useScrollReveal() {
 }
 
 export default function Home() {
-  const { i18n } = useTranslation();
+  const { t, i18n } = useTranslation();
   const lang = i18n.language;
   const { profile, loading } = useProfile();
   const statsRef = useScrollReveal();
@@ -52,65 +52,69 @@ export default function Home() {
   const email = profile?.socialEmail ?? defaultProfile.email;
 
   const stats = [
-    { number: '8+', label: 'Years Experience' },
-    { number: '50+', label: 'Projects Delivered' },
-    { number: '4+', label: 'Years at Weavel' },
+    { number: '8+', label: t('home.yearsExp') },
+    { number: '50+', label: t('home.projectsDelivered') },
+    { number: '4+', label: t('home.yearsAtWeavel') },
   ];
 
   return (
     <div className={styles.page}>
       {/* Hero */}
       <section className={styles.hero}>
-        <div className={styles.heroContent}>
-          <span className={`${styles.eyebrow} reveal`} style={{ animationDelay: '0ms' }}>
-            {loading ? '' : title}
-          </span>
-          <h1 className={`${styles.name} reveal`} style={{ animationDelay: '100ms' }}>
-            <span className="gradient-text">{name}</span>
-          </h1>
-          <p className={`${styles.title} reveal`} style={{ animationDelay: '200ms' }}>
-            {title}
-          </p>
-          <p className={`${styles.tagline} reveal`} style={{ animationDelay: '300ms' }}>
-            {tagline}
-          </p>
+        <div className={styles.container}>
+          <div className={styles.heroContent}>
+            <span className={`${styles.eyebrow} reveal`} style={{ animationDelay: '0ms' }}>
+              {loading ? '' : title}
+            </span>
+            <h1 className={`${styles.name} reveal`} style={{ animationDelay: '100ms' }}>
+              <span className="gradient-text">{name}</span>
+            </h1>
+            <p className={`${styles.title} reveal`} style={{ animationDelay: '200ms' }}>
+              {title}
+            </p>
+            <p className={`${styles.tagline} reveal`} style={{ animationDelay: '300ms' }}>
+              {tagline}
+            </p>
 
-          <div ref={ctaRef} className={`${styles.ctas} reveal`} style={{ animationDelay: '400ms' }}>
-            <Link to="/projects">
-              <Button variant="primary" size="lg">
-                View Projects <ArrowRight size={18} />
-              </Button>
-            </Link>
-            <Link to="/contact">
-              <Button variant="ghost" size="lg">
-                Get in Touch
-              </Button>
-            </Link>
-          </div>
+            <div ref={ctaRef} className={`${styles.ctas} reveal`} style={{ animationDelay: '400ms' }}>
+              <Link to="/projects">
+                <Button variant="primary" size="lg">
+                  {t('home.viewProjects')} <ArrowRight size={18} />
+                </Button>
+              </Link>
+              <Link to="/contact">
+                <Button variant="ghost" size="lg">
+                  {t('home.getInTouch')}
+                </Button>
+              </Link>
+            </div>
 
-          <div ref={socialRef} className={`${styles.social} reveal`} style={{ animationDelay: '500ms' }}>
-            <a href={github} target="_blank" rel="noopener noreferrer" className={styles.socialLink} aria-label="GitHub">
-              <Github size={20} />
-            </a>
-            <a href={linkedin} target="_blank" rel="noopener noreferrer" className={styles.socialLink} aria-label="LinkedIn">
-              <Linkedin size={20} />
-            </a>
-            <a href={`mailto:${email}`} className={styles.socialLink} aria-label="Email">
-              <Mail size={20} />
-            </a>
+            <div ref={socialRef} className={`${styles.social} reveal`} style={{ animationDelay: '500ms' }}>
+              <a href={github} target="_blank" rel="noopener noreferrer" className={styles.socialLink} aria-label="GitHub">
+                <Github size={20} />
+              </a>
+              <a href={linkedin} target="_blank" rel="noopener noreferrer" className={styles.socialLink} aria-label="LinkedIn">
+                <Linkedin size={20} />
+              </a>
+              <a href={`mailto:${email}`} className={styles.socialLink} aria-label="Email">
+                <Mail size={20} />
+              </a>
+            </div>
           </div>
         </div>
       </section>
 
       {/* Stats */}
       <section className={styles.statsSection}>
-        <div ref={statsRef} className={`${styles.statsGrid} reveal`}>
-          {stats.map((stat, i) => (
-            <div key={stat.label} className={styles.statItem} style={{ animationDelay: `${i * 100}ms` }}>
-              <span className={styles.statNumber}>{stat.number}</span>
-              <span className={styles.statLabel}>{stat.label}</span>
-            </div>
-          ))}
+        <div className={styles.container}>
+          <div ref={statsRef} className={`${styles.statsGrid} reveal`}>
+            {stats.map((stat, i) => (
+              <div key={stat.label} className={styles.statItem} style={{ animationDelay: `${i * 100}ms` }}>
+                <span className={styles.statNumber}>{stat.number}</span>
+                <span className={styles.statLabel}>{stat.label}</span>
+              </div>
+            ))}
+          </div>
         </div>
       </section>
     </div>
