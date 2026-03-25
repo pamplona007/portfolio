@@ -1,0 +1,47 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "projects": "Projects",
+    "contact": "Contact"
+  },
+  "home": {
+    "viewProjects": "View Projects",
+    "getInTouch": "Get in Touch",
+    "yearsExp": "Years Experience",
+    "projectsDelivered": "Projects Delivered",
+    "yearsAtWeavel": "Years at Weavel"
+  },
+  "about": {
+    "skills": "Skills",
+    "experience": "Experience",
+    "education": "Education",
+    "present": "Present",
+    "aboutMe": "About Me"
+  },
+  "projects": {
+    "title": "My Projects",
+    "subtitle": "A selection of things I've built — from side projects to production systems.",
+    "all": "All",
+    "noResults": "No projects match the selected filter."
+  },
+  "contact": {
+    "title": "Get in Touch",
+    "subtitle": "Have a project in mind or just want to chat? Drop me a message.",
+    "name": "Name",
+    "email": "Email",
+    "message": "Message",
+    "namePlaceholder": "Your name",
+    "emailPlaceholder": "you@example.com",
+    "messagePlaceholder": "Tell me about your project...",
+    "send": "Send Message",
+    "successTitle": "Message sent!",
+    "successText": "Thanks for reaching out. I'll get back to you as soon as possible.",
+    "sendAnother": "Send another message",
+    "infoTitle": "Other ways to reach me",
+    "infoText": "Prefer a more direct approach? Find me on GitHub, LinkedIn, or send an email."
+  },
+  "footer": {
+    "rights": "All rights reserved."
+  }
+}

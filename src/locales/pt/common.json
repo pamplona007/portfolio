@@ -1,0 +1,47 @@
+{
+  "nav": {
+    "home": "Início",
+    "about": "Sobre",
+    "projects": "Projetos",
+    "contact": "Contato"
+  },
+  "home": {
+    "viewProjects": "Ver Projetos",
+    "getInTouch": "Entre em Contato",
+    "yearsExp": "Anos de Experiência",
+    "projectsDelivered": "Projetos Entregues",
+    "yearsAtWeavel": "Anos na Weavel"
+  },
+  "about": {
+    "skills": "Habilidades",
+    "experience": "Experiência",
+    "education": "Educação",
+    "present": "Atual",
+    "aboutMe": "Sobre Mim"
+  },
+  "projects": {
+    "title": "Meus Projetos",
+    "subtitle": "Uma seleção de coisas que construí — de projetos pessoais a sistemas em produção.",
+    "all": "Todos",
+    "noResults": "Nenhum projeto corresponde ao filtro selecionado."
+  },
+  "contact": {
+    "title": "Entre em Contato",
+    "subtitle": "Tem um projeto em mente ou quer trocar uma ideia? Mande uma mensagem.",
+    "name": "Nome",
+    "email": "E-mail",
+    "message": "Mensagem",
+    "namePlaceholder": "Seu nome",
+    "emailPlaceholder": "voce@exemplo.com",
+    "messagePlaceholder": "Conte-me sobre seu projeto...",
+    "send": "Enviar Mensagem",
+    "successTitle": "Mensagem enviada!",
+    "successText": "Obrigado pelo contato. Vou responder assim que possível.",
+    "sendAnother": "Enviar outra mensagem",
+    "infoTitle": "Outras formas de me encontrar",
+    "infoText": "Prefere uma abordagem mais direta? Me encontre no GitHub, LinkedIn ou envie um e-mail."
+  },
+  "footer": {
+    "rights": "Todos os direitos reservados."
+  }
+}
