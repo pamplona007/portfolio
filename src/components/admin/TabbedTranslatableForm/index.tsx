@@ -18,7 +18,7 @@ interface TabbedTranslatableFormProps<T extends ZodType> {
   schema: T;
   defaultValues: Record<string, unknown>;
   fields: FieldConfig[];
-  onSubmit: (data: Record<string, unknown>, lang: Language) => void;
+  onSubmit: (data: Record<string, unknown>, lang: Language) => Promise<void>;
   onCancel?: () => void;
   submitLabel?: string;
   localizedData: Record<string, Record<string, unknown>>;
@@ -52,8 +52,8 @@ export function TabbedTranslatableForm<T extends ZodType>({
     setFormKey(newLang);
   };
 
-  const handleSubmit = (data: Record<string, unknown>) => {
-    onSubmit(data, activeLang);
+  const handleSubmit = async (data: Record<string, unknown>) => {
+    await onSubmit(data, activeLang);
   };
 
   const currentLangFields = fields.map(f => ({

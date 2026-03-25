@@ -17,7 +17,7 @@ const skillSchema = z.object({
   category: z.enum(['frontend', 'backend', 'devops', 'tools']),
 });
 
-export function SkillsEditor() {
+export default function SkillsEditor() {
   const [skills, setSkills] = useState<Skill[]>([]);
   const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);

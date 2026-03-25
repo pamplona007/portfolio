@@ -1,4 +1,4 @@
-import { useForm, Path } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { forwardRef, useImperativeHandle } from 'react';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -17,19 +17,19 @@ export interface CrudFormRef {
   getValues: () => Record<string, unknown>;
 }
 
-interface CrudFormProps<T extends z.ZodType> {
-  schema: T;
-  defaultValues: z.infer<T>;
+interface CrudFormProps {
+  schema: z.ZodType;
+  defaultValues: Record<string, unknown>;
   fields: FieldConfig[];
-  onSubmit: (data: z.infer<T>) => Promise<void>;
+  onSubmit: (data: Record<string, unknown>) => Promise<void>;
   onCancel?: () => void;
   submitLabel?: string;
   children?: React.ReactNode;
   formKey?: string;
 }
 
-export const CrudForm = forwardRef<CrudFormRef, CrudFormProps<z.ZodType>>(
-  function CrudForm<T extends z.ZodType>(
+export const CrudForm = forwardRef<CrudFormRef, CrudFormProps>(
+  function CrudForm(
     {
       schema,
       defaultValues,
@@ -52,11 +52,11 @@ export const CrudForm = forwardRef<CrudFormRef, CrudFormProps<z.ZodType>>(
     });
 
     useImperativeHandle(ref, () => ({
-      getValues: () => getValues(),
+      getValues: () => getValues() as Record<string, unknown>,
     }));
 
     return (
-      <form onSubmit={handleSubmit(onSubmit)} className={styles.form}>
+      <form onSubmit={handleSubmit(onSubmit as (data: Record<string, unknown>) => Promise<void>)} className={styles.form}>
         {fields.map((field) => (
           <div key={field.name} className={styles.field}>
             <label htmlFor={field.name} className={styles.label}>
@@ -66,15 +66,15 @@ export const CrudForm = forwardRef<CrudFormRef, CrudFormProps<z.ZodType>>(
               <textarea
                 id={field.name}
                 rows={field.rows ?? 4}
-                className={`${styles.textarea} ${errors[field.name as Path<z.infer<T>>] ? styles.inputError : ''}`}
+                className={`${styles.textarea} ${errors[field.name] ? styles.inputError : ''}`}
                 placeholder={field.placeholder}
-                {...register(field.name as Path<z.infer<T>>)}
+                {...register(field.name)}
               />
             ) : field.type === 'select' ? (
               <select
                 id={field.name}
-                className={`${styles.select} ${errors[field.name as Path<z.infer<T>>] ? styles.inputError : ''}`}
-                {...register(field.name as Path<z.infer<T>>)}
+                className={`${styles.select} ${errors[field.name] ? styles.inputError : ''}`}
+                {...register(field.name)}
               >
                 {field.options?.map((opt) => (
                   <option key={opt.value} value={opt.value}>
@@ -86,13 +86,13 @@ export const CrudForm = forwardRef<CrudFormRef, CrudFormProps<z.ZodType>>(
               <input
                 id={field.name}
                 type={field.type ?? 'text'}
-                className={`${styles.input} ${errors[field.name as Path<z.infer<T>>] ? styles.inputError : ''}`}
+                className={`${styles.input} ${errors[field.name] ? styles.inputError : ''}`}
                 placeholder={field.placeholder}
-                {...register(field.name as Path<z.infer<T>>)}
+                {...register(field.name)}
               />
             )}
-            {errors[field.name as Path<z.infer<T>>] && (
-              <span className={styles.error}>{String(errors[field.name as Path<z.infer<T>>]?.message)}</span>
+            {errors[field.name] && (
+              <span className={styles.error}>{String(errors[field.name]?.message)}</span>
             )}
           </div>
         ))}
