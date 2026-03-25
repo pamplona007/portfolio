@@ -8,14 +8,20 @@ export function useProjects(status?: 'active' | 'inactive') {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    let query = supabase.from('projects').select('*').order('sort_order');
-    if (status) query = query.eq('status', status);
-
-    query.then(({ data, error }) => {
-      if (error) setError(error.message);
-      else setProjects(data ?? []);
-      setLoading(false);
-    });
+    async function load() {
+      try {
+        let query = supabase.from('projects').select('*').order('sortOrder');
+        if (status) query = query.eq('status', status);
+        const { data, error: err } = await query;
+        if (err) setError(err.message);
+        else setProjects(data ?? []);
+      } catch (e) {
+        setError('Failed to load projects');
+      } finally {
+        setLoading(false);
+      }
+    }
+    load();
   }, [status]);
 
   return { projects, loading, error };
