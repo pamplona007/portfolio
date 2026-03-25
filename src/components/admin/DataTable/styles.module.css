@@ -1,0 +1,59 @@
+.wrapper {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--color-admin-border);
+  border-radius: var(--radius-md);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.table th {
+  text-align: left;
+  padding: var(--space-3) var(--space-4);
+  font-weight: 600;
+  color: var(--color-admin-text-secondary);
+  background: var(--color-admin-surface-2);
+  border-bottom: 1px solid var(--color-admin-border);
+  white-space: nowrap;
+}
+
+.table td {
+  padding: var(--space-3) var(--space-4);
+  color: var(--color-admin-text);
+  border-bottom: 1px solid var(--color-admin-border);
+  vertical-align: middle;
+}
+
+.table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.table tbody tr:hover td {
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.empty {
+  text-align: center;
+  padding: var(--space-12) !important;
+  color: var(--color-admin-text-secondary);
+}
+
+.skeletonRow td {
+  padding: var(--space-4);
+}
+
+.skeleton {
+  height: 16px;
+  background: var(--color-admin-surface-2);
+  border-radius: var(--radius-xs);
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}

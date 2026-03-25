@@ -1,0 +1,152 @@
+.page {
+  padding: var(--space-16) 0;
+}
+
+.container {
+  max-width: var(--max-width-text);
+  margin: 0 auto;
+  padding: 0 var(--space-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.heading {
+  font-size: clamp(2.5rem, 5vw, 3.5rem);
+  animation: fadeInUp var(--transition-slow) both;
+}
+
+.bioGrid {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.bio {
+  font-size: 1.0625rem;
+  color: var(--color-text-secondary);
+  line-height: 1.75;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-8);
+}
+
+.sectionTitle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  padding-bottom: var(--space-4);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.sectionTitle svg {
+  color: var(--color-primary);
+}
+
+.skillsGrid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+/* Timeline */
+.timeline {
+  position: relative;
+  padding-left: var(--space-8);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.timeline::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 12px;
+  bottom: 12px;
+  width: 1px;
+  background: linear-gradient(to bottom, var(--color-primary-container), transparent);
+}
+
+.timelineItem {
+  position: relative;
+  animation: fadeInUp var(--transition-slow) both;
+}
+
+.timelineDot {
+  position: absolute;
+  left: calc(-1 * var(--space-8) - 4px);
+  top: 18px;
+  width: 10px;
+  height: 10px;
+  background: var(--color-primary-container);
+  border-radius: 50%;
+  box-shadow: var(--glow-primary-sm);
+}
+
+.timelineCard {
+  background: var(--color-glass-bg);
+  backdrop-filter: blur(20px);
+  border: 1px solid var(--color-glass-border);
+  border-radius: var(--radius-lg);
+  padding: var(--space-6);
+  transition: all var(--transition-base);
+}
+
+.timelineCard:hover {
+  border-color: rgba(255, 107, 53, 0.2);
+  box-shadow: var(--glow-primary);
+  transform: translateX(4px);
+}
+
+.timelineHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+
+.role {
+  font-size: 1.0625rem;
+  font-weight: 700;
+}
+
+.company {
+  font-size: 0.9375rem;
+  color: var(--color-primary);
+  font-weight: 600;
+  margin-top: var(--space-1);
+}
+
+.period {
+  font-size: 0.8125rem;
+  color: var(--color-text-muted);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.description {
+  font-size: 0.9375rem;
+  color: var(--color-text-secondary);
+  line-height: 1.65;
+}
+
+@media (max-width: 640px) {
+  .timelineHeader {
+    flex-direction: column;
+  }
+}
