@@ -2,27 +2,37 @@ import { useEffect, useState } from 'react';
 import { Plus, Pencil, Trash2, ExternalLink, Github } from 'lucide-react';
 import { supabase } from '@/services/supabase';
 import { Modal } from '@/components/admin/Modal';
-import { CrudForm } from '@/components/admin/CrudForm';
+import { TabbedTranslatableForm } from '@/components/admin/TabbedTranslatableForm';
 import { z } from 'zod';
-import type { Project } from '@/types';
+import type { Project, LocalizedString } from '@/types';
 import styles from './styles.module.css';
 
+const localizedString = z.object({
+  en: z.string(),
+  pt: z.string(),
+});
+
 const projectSchema = z.object({
-  title: z.string().min(1),
+  title: localizedString,
   slug: z.string().min(1),
-  description: z.string().min(1),
-  techStack: z.string(), // comma-separated, converted to array
+  description: localizedString,
+  techStack: z.string(),
   liveUrl: z.string().url().optional().or(z.literal('')),
   repoUrl: z.string().url().optional().or(z.literal('')),
-  screenshots: z.string(), // JSON string for now
+  screenshots: z.string(),
   status: z.enum(['active', 'inactive']),
 });
+
+type Language = 'en' | 'pt';
+
+const emptyLocalizedString = { en: '', pt: '' };
 
 export default function ProjectsEditor() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
   const [editingProject, setEditingProject] = useState<Project | null>(null);
+  const [localizedData, setLocalizedData] = useState<Record<string, Record<string, unknown>>>({});
 
   useEffect(() => {
     loadProjects();
@@ -33,7 +43,7 @@ export default function ProjectsEditor() {
       const { data } = await supabase
         .from('projects')
         .select('*')
-        .order('sort_order');
+        .order('sortOrder');
       if (data) setProjects(data);
     } catch (err) {
       console.error(err);
@@ -42,23 +52,31 @@ export default function ProjectsEditor() {
     }
   }
 
-  const handleSave = async (formData: z.infer<typeof projectSchema>) => {
-    const data = {
-      ...formData,
-      techStack: formData.techStack.split(',').map(s => s.trim()).filter(Boolean),
-      screenshots: [],
+  const handleSave = async (formData: Record<string, unknown>, _lang: Language) => {
+    const payload = {
+      title: localizedData['title'] as Record<string, string>,
+      description: localizedData['description'] as Record<string, string>,
+      slug: formData.slug as string,
+      techStack: (formData.techStack as string).split(',').map((s: string) => s.trim()).filter(Boolean),
+      liveUrl: (formData.liveUrl as string) || '',
+      repoUrl: (formData.repoUrl as string) || '',
+      screenshots: '',
+      status: formData.status as 'active' | 'inactive',
     };
 
     if (editingProject) {
-      await supabase.from('projects').update(data).eq('id', editingProject.id);
-      setProjects(projects.map(p => p.id === editingProject.id ? { ...p, ...data } : p));
+      await supabase.from('projects').update(payload).eq('id', editingProject.id);
+      setProjects(projects.map(p => p.id === editingProject.id
+        ? { ...p, title: payload.title as LocalizedString, description: payload.description as LocalizedString, slug: payload.slug, techStack: payload.techStack, liveUrl: payload.liveUrl, repoUrl: payload.repoUrl, screenshots: payload.screenshots, status: payload.status }
+        : p
+      ) as Project[]);
     } else {
       const { data: newProject } = await supabase
         .from('projects')
-        .insert([{ ...data, sort_order: projects.length }])
+        .insert([{ ...payload, sortOrder: projects.length }])
         .select()
         .single();
-      if (newProject) setProjects([...projects, newProject]);
+      if (newProject) setProjects([...projects, newProject as Project]);
     }
     setModalOpen(false);
     setEditingProject(null);
@@ -69,8 +87,23 @@ export default function ProjectsEditor() {
     setProjects(projects.filter(p => p.id !== id));
   };
 
-  const openCreate = () => { setEditingProject(null); setModalOpen(true); };
-  const openEdit = (project: Project) => { setEditingProject(project); setModalOpen(true); };
+  const openCreate = () => {
+    setEditingProject(null);
+    setLocalizedData({
+      title: { en: '', pt: '' },
+      description: { en: '', pt: '' },
+    });
+    setModalOpen(true);
+  };
+
+  const openEdit = (project: Project) => {
+    setEditingProject(project);
+    setLocalizedData({
+      title: (project.title as Record<string, string>) ?? { en: '', pt: '' },
+      description: (project.description as Record<string, string>) ?? { en: '', pt: '' },
+    });
+    setModalOpen(true);
+  };
 
   return (
     <div className={styles.page}>
@@ -96,12 +129,12 @@ export default function ProjectsEditor() {
             <div key={project.id} className={styles.projectCard}>
               <div className={styles.projectInfo}>
                 <div className={styles.projectHeader}>
-                  <h3 className={styles.projectTitle}>{project.title}</h3>
+                  <h3 className={styles.projectTitle}>{(project.title as Record<string, string>).en}</h3>
                   <span className={`${styles.statusBadge} ${styles[project.status]}`}>
                     {project.status}
                   </span>
                 </div>
-                <p className={styles.projectDesc}>{project.description}</p>
+                <p className={styles.projectDesc}>{(project.description as Record<string, string>).en}</p>
                 <div className={styles.techStack}>
                   {project.techStack.map(tech => (
                     <span key={tech} className={styles.tech}>{tech}</span>
@@ -137,7 +170,7 @@ export default function ProjectsEditor() {
         title={editingProject ? 'Edit Project' : 'New Project'}
         size="lg"
       >
-        <CrudForm
+        <TabbedTranslatableForm
           schema={projectSchema}
           defaultValues={editingProject ? {
             ...editingProject,
@@ -146,7 +179,7 @@ export default function ProjectsEditor() {
             liveUrl: editingProject.liveUrl ?? '',
             repoUrl: editingProject.repoUrl ?? '',
           } : {
-            title: '', slug: '', description: '', techStack: '', liveUrl: '', repoUrl: '', screenshots: '', status: 'active' as const
+            title: emptyLocalizedString, slug: '', description: emptyLocalizedString, techStack: '', liveUrl: '', repoUrl: '', screenshots: '', status: 'active' as const
           }}
           fields={[
             { name: 'title', label: 'Title' },
@@ -165,9 +198,14 @@ export default function ProjectsEditor() {
               ],
             },
           ]}
+          localizedData={localizedData}
+          onLocalizedDataChange={setLocalizedData}
           onSubmit={handleSave}
           onCancel={() => { setModalOpen(false); setEditingProject(null); }}
-        />
+          submitLabel="Save"
+        >
+          {null}
+        </TabbedTranslatableForm>
       </Modal>
     </div>
   );
