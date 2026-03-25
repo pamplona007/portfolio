@@ -2,37 +2,46 @@ import { useEffect, useState } from 'react';
 import { Plus, Pencil, Trash2 } from 'lucide-react';
 import { supabase } from '@/services/supabase';
 import { Modal } from '@/components/admin/Modal';
-import { CrudForm } from '@/components/admin/CrudForm';
+import { TabbedTranslatableForm } from '@/components/admin/TabbedTranslatableForm';
 import { z } from 'zod';
-import type { Profile, Experience, Education } from '@/types';
+import type { Profile, Experience, Education, LocalizedString } from '@/types';
 import styles from './styles.module.css';
 
+const localizedString = z.object({
+  en: z.string(),
+  pt: z.string(),
+});
+
 const profileSchema = z.object({
-  name: z.string().min(1),
-  title: z.string().min(1),
-  tagline: z.string().nullish(),
-  bio: z.string().nullish(),
+  name: localizedString,
+  title: localizedString,
+  tagline: localizedString.nullish(),
+  bio: localizedString.nullish(),
   socialGithub: z.string().url().nullish().or(z.literal('')),
   socialLinkedin: z.string().url().nullish().or(z.literal('')),
   socialEmail: z.string().email().nullish().or(z.literal('')),
 });
 
 const experienceSchema = z.object({
-  company: z.string().min(1),
-  role: z.string().min(1),
+  company: localizedString,
+  role: localizedString,
   startDate: z.string().min(1),
   endDate: z.string().optional(),
   current: z.boolean(),
-  description: z.string().optional(),
+  description: localizedString.nullish(),
 });
 
 const educationSchema = z.object({
-  school: z.string().min(1),
-  degree: z.string().min(1),
-  field: z.string().min(1),
+  school: localizedString,
+  degree: localizedString,
+  field: localizedString,
   startDate: z.string().min(1),
   endDate: z.string().optional(),
 });
+
+type Language = 'en' | 'pt';
+
+const emptyLocalizedString = { en: '', pt: '' };
 
 export default function AboutEditor() {
   const [profile, setProfile] = useState<Profile | null>(null);
@@ -45,6 +54,10 @@ export default function AboutEditor() {
   const [editingExp, setEditingExp] = useState<Experience | null>(null);
   const [editingEdu, setEditingEdu] = useState<Education | null>(null);
 
+  const [profileLocalizedData, setProfileLocalizedData] = useState<Record<string, Record<string, unknown>>>({});
+  const [expLocalizedData, setExpLocalizedData] = useState<Record<string, Record<string, unknown>>>({});
+  const [eduLocalizedData, setEduLocalizedData] = useState<Record<string, Record<string, unknown>>>({});
+
   useEffect(() => {
     loadData();
   }, []);
@@ -53,7 +66,7 @@ export default function AboutEditor() {
     try {
       const [profileRes, expRes, eduRes] = await Promise.all([
         supabase.from('profile').select('*').single(),
-        supabase.from('experience').select('*').order('sort_order'),
+        supabase.from('experience').select('*').order('sortOrder'),
         supabase.from('education').select('*'),
       ]);
       if (profileRes.data) setProfile(profileRes.data);
@@ -66,32 +79,59 @@ export default function AboutEditor() {
     }
   }
 
-  const handleProfileSave = async (data: z.infer<typeof profileSchema>) => {
+  const handleProfileSave = async (_data: Record<string, unknown>, _lang: Language) => {
     if (!profile) return;
-    await supabase.from('profile').update(data).eq('id', profile.id);
-    setProfile({ ...profile, ...data });
+    const payload = {
+      name: profileLocalizedData['name'] as Record<string, string>,
+      title: profileLocalizedData['title'] as Record<string, string>,
+      tagline: profileLocalizedData['tagline'] as Record<string, string> | null,
+      bio: profileLocalizedData['bio'] as Record<string, string> | null,
+    };
+    await supabase.from('profile').update(payload).eq('id', profile.id);
+    setProfile({ ...profile, ...payload });
     setProfileModalOpen(false);
   };
 
-  const handleExpSave = async (data: z.infer<typeof experienceSchema>) => {
+  const handleExpSave = async (_data: Record<string, unknown>, _lang: Language) => {
+    const payload = {
+      company: expLocalizedData['company'] as Record<string, string>,
+      role: expLocalizedData['role'] as Record<string, string>,
+      description: expLocalizedData['description'] as Record<string, string> | null,
+      startDate: (_data.startDate as string) || '',
+      endDate: (_data.endDate as string) || undefined,
+      current: (_data.current as boolean) || false,
+    };
     if (editingExp) {
-      await supabase.from('experience').update(data).eq('id', editingExp.id);
-      setExperiences(experiences.map(e => e.id === editingExp.id ? { ...e, ...data } : e));
+      await supabase.from('experience').update(payload).eq('id', editingExp.id);
+      setExperiences(experiences.map(e => e.id === editingExp.id
+        ? { ...e, company: payload.company as LocalizedString, role: payload.role as LocalizedString, description: payload.description as LocalizedString | null, startDate: payload.startDate, endDate: payload.endDate, current: payload.current }
+        : e
+      ) as Experience[]);
     } else {
-      const { data: newExp } = await supabase.from('experience').insert([data]).select().single();
-      if (newExp) setExperiences([...experiences, newExp]);
+      const { data: newExp } = await supabase.from('experience').insert([payload]).select().single();
+      if (newExp) setExperiences([...experiences, newExp as Experience]);
     }
     setExpModalOpen(false);
     setEditingExp(null);
   };
 
-  const handleEduSave = async (data: z.infer<typeof educationSchema>) => {
+  const handleEduSave = async (_data: Record<string, unknown>, _lang: Language) => {
+    const payload = {
+      school: eduLocalizedData['school'] as Record<string, string>,
+      degree: eduLocalizedData['degree'] as Record<string, string>,
+      field: eduLocalizedData['field'] as Record<string, string>,
+      startDate: (_data.startDate as string) || '',
+      endDate: (_data.endDate as string) || undefined,
+    };
     if (editingEdu) {
-      await supabase.from('education').update(data).eq('id', editingEdu.id);
-      setEducation(education.map(e => e.id === editingEdu.id ? { ...e, ...data } : e));
+      await supabase.from('education').update(payload).eq('id', editingEdu.id);
+      setEducation(education.map(e => e.id === editingEdu.id
+        ? { ...e, school: payload.school as LocalizedString, degree: payload.degree as LocalizedString, field: payload.field as LocalizedString, startDate: payload.startDate, endDate: payload.endDate }
+        : e
+      ) as Education[]);
     } else {
-      const { data: newEdu } = await supabase.from('education').insert([data]).select().single();
-      if (newEdu) setEducation([...education, newEdu]);
+      const { data: newEdu } = await supabase.from('education').insert([payload]).select().single();
+      if (newEdu) setEducation([...education, newEdu as Education]);
     }
     setEduModalOpen(false);
     setEditingEdu(null);
@@ -105,6 +145,47 @@ export default function AboutEditor() {
   const handleDeleteEdu = async (id: string) => {
     await supabase.from('education').delete().eq('id', id);
     setEducation(education.filter(e => e.id !== id));
+  };
+
+  const openProfileEdit = () => {
+    if (!profile) return;
+    setProfileLocalizedData({
+      name: profile.name as Record<string, string>,
+      title: profile.title as Record<string, string>,
+      tagline: (profile.tagline as Record<string, string>) ?? { en: '', pt: '' },
+      bio: (profile.bio as Record<string, string>) ?? { en: '', pt: '' },
+    });
+    setProfileModalOpen(true);
+  };
+
+  const openExpCreate = () => {
+    setEditingExp(null);
+    setExpLocalizedData({
+      company: { en: '', pt: '' },
+      role: { en: '', pt: '' },
+      description: { en: '', pt: '' },
+    });
+    setExpModalOpen(true);
+  };
+
+  const openExpEdit = (exp: Experience) => {
+    setEditingExp(exp);
+    setExpLocalizedData({
+      company: (exp.company as Record<string, string>) ?? { en: '', pt: '' },
+      role: (exp.role as Record<string, string>) ?? { en: '', pt: '' },
+      description: (exp.description as Record<string, string>) ?? { en: '', pt: '' },
+    });
+    setExpModalOpen(true);
+  };
+
+  const openEduCreate = () => {
+    setEditingEdu(null);
+    setEduLocalizedData({
+      school: { en: '', pt: '' },
+      degree: { en: '', pt: '' },
+      field: { en: '', pt: '' },
+    });
+    setEduModalOpen(true);
   };
 
   if (loading) {
@@ -121,16 +202,16 @@ export default function AboutEditor() {
       <section className={styles.section}>
         <div className={styles.sectionHeader}>
           <h2 className={styles.sectionTitle}>Profile</h2>
-          <button className={styles.editBtn} onClick={() => setProfileModalOpen(true)}>
+          <button className={styles.editBtn} onClick={openProfileEdit}>
             <Pencil size={14} /> Edit
           </button>
         </div>
         {profile && (
           <div className={styles.profileCard}>
-            <h3 className={styles.profileName}>{profile.name}</h3>
-            <p className={styles.profileTitle}>{profile.title}</p>
-            {profile.tagline && <p className={styles.profileTagline}>{profile.tagline}</p>}
-            {profile.bio && <p className={styles.profileBio}>{profile.bio}</p>}
+            <h3 className={styles.profileName}>{(profile.name as Record<string, string>).en}</h3>
+            <p className={styles.profileTitle}>{(profile.title as Record<string, string>).en}</p>
+            {profile.tagline && <p className={styles.profileTagline}>{(profile.tagline as Record<string, string>).en}</p>}
+            {profile.bio && <p className={styles.profileBio}>{(profile.bio as Record<string, string>).en}</p>}
           </div>
         )}
       </section>
@@ -139,7 +220,7 @@ export default function AboutEditor() {
       <section className={styles.section}>
         <div className={styles.sectionHeader}>
           <h2 className={styles.sectionTitle}>Experience</h2>
-          <button className={styles.addBtn} onClick={() => { setEditingExp(null); setExpModalOpen(true); }}>
+          <button className={styles.addBtn} onClick={openExpCreate}>
             <Plus size={14} /> Add
           </button>
         </div>
@@ -147,13 +228,13 @@ export default function AboutEditor() {
           {experiences.map(exp => (
             <div key={exp.id} className={styles.item}>
               <div className={styles.itemContent}>
-                <strong>{exp.role}</strong> — {exp.company}
+                <strong>{(exp.role as Record<string, string>).en}</strong> — {(exp.company as Record<string, string>).en}
                 <span className={styles.itemPeriod}>
                   {new Date(exp.startDate).getFullYear()} — {exp.current ? 'Present' : exp.endDate ? new Date(exp.endDate).getFullYear() : ''}
                 </span>
               </div>
               <div className={styles.itemActions}>
-                <button className={styles.iconBtn} onClick={() => { setEditingExp(exp); setExpModalOpen(true); }}>
+                <button className={styles.iconBtn} onClick={() => openExpEdit(exp)}>
                   <Pencil size={14} />
                 </button>
                 <button className={`${styles.iconBtn} ${styles.danger}`} onClick={() => handleDeleteExp(exp.id)}>
@@ -169,7 +250,7 @@ export default function AboutEditor() {
       <section className={styles.section}>
         <div className={styles.sectionHeader}>
           <h2 className={styles.sectionTitle}>Education</h2>
-          <button className={styles.addBtn} onClick={() => { setEditingEdu(null); setEduModalOpen(true); }}>
+          <button className={styles.addBtn} onClick={openEduCreate}>
             <Plus size={14} /> Add
           </button>
         </div>
@@ -177,7 +258,7 @@ export default function AboutEditor() {
           {education.map(edu => (
             <div key={edu.id} className={styles.item}>
               <div className={styles.itemContent}>
-                <strong>{edu.degree}</strong> — {edu.school}
+                <strong>{(edu.degree as Record<string, string>).en}</strong> — {(edu.school as Record<string, string>).en}
                 <span className={styles.itemPeriod}>
                   {new Date(edu.startDate).getFullYear()} — {edu.endDate ? new Date(edu.endDate).getFullYear() : ''}
                 </span>
@@ -198,23 +279,23 @@ export default function AboutEditor() {
         onOpenChange={setProfileModalOpen}
         title="Edit Profile"
       >
-        {profile && (
-          <CrudForm
-            schema={profileSchema}
-            defaultValues={profile}
-            fields={[
-              { name: 'name', label: 'Name' },
-              { name: 'title', label: 'Title' },
-              { name: 'tagline', label: 'Tagline', type: 'text' },
-              { name: 'bio', label: 'Bio', type: 'textarea', rows: 5 },
-              { name: 'socialGithub', label: 'GitHub URL', type: 'url' },
-              { name: 'socialLinkedin', label: 'LinkedIn URL', type: 'url' },
-              { name: 'socialEmail', label: 'Email', type: 'email' },
-            ]}
-            onSubmit={handleProfileSave}
-            onCancel={() => setProfileModalOpen(false)}
-          />
-        )}
+        <TabbedTranslatableForm
+          schema={profileSchema}
+          defaultValues={profileLocalizedData['en'] ?? { name: emptyLocalizedString, title: emptyLocalizedString, tagline: emptyLocalizedString, bio: emptyLocalizedString }}
+          fields={[
+            { name: 'name', label: 'Name' },
+            { name: 'title', label: 'Title' },
+            { name: 'tagline', label: 'Tagline', type: 'text' },
+            { name: 'bio', label: 'Bio', type: 'textarea', rows: 5 },
+          ]}
+          localizedData={profileLocalizedData}
+          onLocalizedDataChange={setProfileLocalizedData}
+          onSubmit={handleProfileSave}
+          onCancel={() => setProfileModalOpen(false)}
+          submitLabel="Save"
+        >
+          {null}
+        </TabbedTranslatableForm>
       </Modal>
 
       {/* Experience Modal */}
@@ -223,15 +304,14 @@ export default function AboutEditor() {
         onOpenChange={(v) => { setExpModalOpen(v); if (!v) setEditingExp(null); }}
         title={editingExp ? 'Edit Experience' : 'Add Experience'}
       >
-        <CrudForm
+        <TabbedTranslatableForm
           schema={experienceSchema}
           defaultValues={editingExp ? {
             ...editingExp,
             startDate: editingExp.startDate.split('T')[0],
             endDate: editingExp.endDate?.split('T')[0] ?? '',
-            description: editingExp.description ?? '',
           } : {
-            company: '', role: '', startDate: '', endDate: '', current: false, description: ''
+            company: emptyLocalizedString, role: emptyLocalizedString, startDate: '', endDate: '', current: false, description: emptyLocalizedString
           }}
           fields={[
             { name: 'company', label: 'Company' },
@@ -240,9 +320,14 @@ export default function AboutEditor() {
             { name: 'endDate', label: 'End Date (leave empty if current)', type: 'text', placeholder: '2024-12' },
             { name: 'description', label: 'Description', type: 'textarea', rows: 3 },
           ]}
+          localizedData={expLocalizedData}
+          onLocalizedDataChange={setExpLocalizedData}
           onSubmit={handleExpSave}
           onCancel={() => { setExpModalOpen(false); setEditingExp(null); }}
-        />
+          submitLabel="Save"
+        >
+          {null}
+        </TabbedTranslatableForm>
       </Modal>
 
       {/* Education Modal */}
@@ -251,14 +336,14 @@ export default function AboutEditor() {
         onOpenChange={(v) => { setEduModalOpen(v); if (!v) setEditingEdu(null); }}
         title={editingEdu ? 'Edit Education' : 'Add Education'}
       >
-        <CrudForm
+        <TabbedTranslatableForm
           schema={educationSchema}
           defaultValues={editingEdu ? {
             ...editingEdu,
             startDate: editingEdu.startDate.split('T')[0],
             endDate: editingEdu.endDate?.split('T')[0] ?? '',
           } : {
-            school: '', degree: '', field: '', startDate: '', endDate: ''
+            school: emptyLocalizedString, degree: emptyLocalizedString, field: emptyLocalizedString, startDate: '', endDate: ''
           }}
           fields={[
             { name: 'school', label: 'School' },
@@ -267,9 +352,14 @@ export default function AboutEditor() {
             { name: 'startDate', label: 'Start Date', type: 'text', placeholder: '2012' },
             { name: 'endDate', label: 'End Date', type: 'text', placeholder: '2016' },
           ]}
+          localizedData={eduLocalizedData}
+          onLocalizedDataChange={setEduLocalizedData}
           onSubmit={handleEduSave}
           onCancel={() => { setEduModalOpen(false); setEditingEdu(null); }}
-        />
+          submitLabel="Save"
+        >
+          {null}
+        </TabbedTranslatableForm>
       </Modal>
     </div>
   );
