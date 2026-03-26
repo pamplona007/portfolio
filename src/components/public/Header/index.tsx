@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Menu, X, Github, Linkedin, Mail } from 'lucide-react';
+import { useProfile } from '@/hooks/useProfile';
 import styles from './styles.module.css';
 
 export function Header() {
@@ -10,6 +11,11 @@ export function Header() {
   const location = useLocation();
   const { i18n, t } = useTranslation();
   const currentLang = i18n.language;
+  const { profile } = useProfile();
+
+  const github = profile?.socialGithub ?? 'https://github.com/pamplona007';
+  const linkedin = profile?.socialLinkedin ?? 'https://linkedin.com/in/lucaspamplona';
+  const email = profile?.socialEmail ?? 'pamplona.developer@gmail.com';
 
   const navLinks = [
     { href: '/', label: t('nav.home') },
@@ -55,13 +61,13 @@ export function Header() {
           <button onClick={toggleLang} className={styles.langToggle} aria-label="Toggle language">
             {currentLang === 'en' ? '🇧🇷 PT' : '🇬🇧 EN'}
           </button>
-          <a href="https://github.com/lucaspamplona" target="_blank" rel="noopener noreferrer" aria-label="GitHub" className={styles.socialLink}>
+          <a href={github} target="_blank" rel="noopener noreferrer" aria-label="GitHub" className={styles.socialLink}>
             <Github size={18} />
           </a>
-          <a href="https://linkedin.com/in/lucaspamplona" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className={styles.socialLink}>
+          <a href={linkedin} target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className={styles.socialLink}>
             <Linkedin size={18} />
           </a>
-          <a href="mailto:lucas@pamplona.dev" aria-label="Email" className={styles.socialLink}>
+          <a href={`mailto:${email}`} aria-label="Email" className={styles.socialLink}>
             <Mail size={18} />
           </a>
         </div>
@@ -87,9 +93,9 @@ export function Header() {
             </Link>
           ))}
           <div className={styles.mobileSocial}>
-            <a href="https://github.com/lucaspamplona" target="_blank" rel="noopener noreferrer" className={styles.socialLink}><Github size={20} /></a>
-            <a href="https://linkedin.com/in/lucaspamplona" target="_blank" rel="noopener noreferrer" className={styles.socialLink}><Linkedin size={20} /></a>
-            <a href="mailto:lucas@pamplona.dev" className={styles.socialLink}><Mail size={20} /></a>
+            <a href={github} target="_blank" rel="noopener noreferrer" className={styles.socialLink}><Github size={20} /></a>
+            <a href={linkedin} target="_blank" rel="noopener noreferrer" className={styles.socialLink}><Linkedin size={20} /></a>
+            <a href={`mailto:${email}`} className={styles.socialLink}><Mail size={20} /></a>
           </div>
         </div>
       )}

@@ -6,6 +6,7 @@ import { Send, Github, Linkedin, Mail, CheckCircle } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/public/Button';
 import { useContact } from '@/hooks/useContact';
+import { useProfile } from '@/hooks/useProfile';
 import { trackPageView } from '@/services/analytics';
 import styles from './styles.module.css';
 
@@ -39,6 +40,11 @@ export default function Contact() {
   const formRef = useScrollReveal();
   const infoRef = useScrollReveal();
   const { submitContact, loading } = useContact();
+  const { profile } = useProfile();
+
+  const github = profile?.socialGithub ?? 'https://github.com/pamplona007';
+  const linkedin = profile?.socialLinkedin ?? 'https://linkedin.com/in/lucaspamplona';
+  const email = profile?.socialEmail ?? 'pamplona.developer@gmail.com';
 
   const {
     register,
@@ -153,17 +159,17 @@ export default function Contact() {
               {t('contact.infoText')}
             </p>
             <div className={styles.infoLinks}>
-              <a href="https://github.com/lucaspamplona" target="_blank" rel="noopener noreferrer" className={styles.infoLink}>
+              <a href={github} target="_blank" rel="noopener noreferrer" className={styles.infoLink}>
                 <Github size={20} />
                 <span>GitHub</span>
               </a>
-              <a href="https://linkedin.com/in/lucaspamplona" target="_blank" rel="noopener noreferrer" className={styles.infoLink}>
+              <a href={linkedin} target="_blank" rel="noopener noreferrer" className={styles.infoLink}>
                 <Linkedin size={20} />
                 <span>LinkedIn</span>
               </a>
-              <a href="mailto:lucas@pamplona.dev" className={styles.infoLink}>
+              <a href={`mailto:${email}`} className={styles.infoLink}>
                 <Mail size={20} />
-                <span>lucas@pamplona.dev</span>
+                <span>{email}</span>
               </a>
             </div>
           </div>

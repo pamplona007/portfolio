@@ -3,15 +3,14 @@
 }
 
 .container {
-  max-width: var(--max-width-text);
+  max-width: var(--max-width-wide);
   margin: 0 auto;
-  padding: 0 var(--space-6);
 }
 
 .grid {
   display: grid;
-  grid-template-columns: 1fr 320px;
-  gap: var(--space-12);
+  grid-template-columns: 1fr 380px;
+  gap: var(--space-16);
   align-items: start;
 }
 

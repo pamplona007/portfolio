@@ -20,6 +20,9 @@ export interface Profile {
   socialLinkedin: string | null;
   socialEmail: string | null;
   metaDescription: LocalizedString | null;
+  yearsExperience: number;
+  projectsDelivered: number;
+  yearsAtCompany: number;
   language: string;
   theme: string;
   createdAt: string;
