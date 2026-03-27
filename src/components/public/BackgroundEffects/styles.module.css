@@ -3,40 +3,41 @@
 .orb3 {
   position: fixed;
   border-radius: 50%;
-  filter: blur(100px);
-  opacity: 0.35;
+  filter: blur(120px);
+  opacity: 0.12;
   pointer-events: none;
   z-index: var(--z-bg);
-  animation: floatOrb 20s ease-in-out infinite;
+  animation: floatOrb 25s ease-in-out infinite;
 }
 
 .orb1 {
-  width: 600px;
-  height: 600px;
-  background: radial-gradient(circle, #ff6b35 0%, transparent 70%);
-  top: -200px;
-  right: -100px;
+  width: 700px;
+  height: 700px;
+  background: radial-gradient(circle, #B85C38 0%, transparent 70%);
+  top: -250px;
+  right: -150px;
   animation-delay: 0s;
+  opacity: 0.08;
 }
 
 .orb2 {
   width: 500px;
   height: 500px;
-  background: radial-gradient(circle, #6200ea 0%, transparent 70%);
-  bottom: 10%;
-  left: -150px;
-  animation-delay: -7s;
-  opacity: 0.25;
+  background: radial-gradient(circle, #7A8C7A 0%, transparent 70%);
+  bottom: 5%;
+  left: -200px;
+  animation-delay: -9s;
+  opacity: 0.1;
 }
 
 .orb3 {
-  width: 400px;
-  height: 400px;
-  background: radial-gradient(circle, #ff6b35 0%, transparent 70%);
+  width: 450px;
+  height: 450px;
+  background: radial-gradient(circle, #C8B89A 0%, transparent 70%);
   bottom: -100px;
-  right: 20%;
-  animation-delay: -14s;
-  opacity: 0.2;
+  right: 15%;
+  animation-delay: -18s;
+  opacity: 0.1;
 }
 
 .grain {
@@ -44,13 +45,13 @@
   inset: 0;
   pointer-events: none;
   z-index: 999;
-  opacity: 0.025;
+  opacity: 0.02;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
 }
 
 @keyframes floatOrb {
   0%, 100% { transform: translate(0, 0) scale(1); }
-  25% { transform: translate(12px, -20px) scale(1.03); }
-  50% { transform: translate(-6px, -10px) scale(0.97); }
-  75% { transform: translate(-14px, 6px) scale(1.01); }
+  25% { transform: translate(10px, -18px) scale(1.02); }
+  50% { transform: translate(-5px, -9px) scale(0.98); }
+  75% { transform: translate(-12px, 5px) scale(1.01); }
 }

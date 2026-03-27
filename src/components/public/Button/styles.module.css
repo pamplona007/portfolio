@@ -11,6 +11,7 @@
   transition: all var(--transition-base);
   position: relative;
   white-space: nowrap;
+  backdrop-filter: blur(2px);
 }
 
 .btn:disabled {
@@ -19,14 +20,14 @@
 }
 
 .primary {
-  background: var(--color-primary-gradient);
+  background: var(--color-primary);
   color: var(--color-on-primary);
-  box-shadow: 0 0 0 0 rgba(255, 107, 53, 0);
+  box-shadow: 0 1px 2px rgba(184, 92, 56, 0.15);
 }
 
 .primary:hover:not(:disabled) {
-  background: var(--color-primary-gradient-hover);
-  box-shadow: var(--glow-primary);
+  background: var(--color-primary-dim);
+  box-shadow: var(--shadow-md);
   transform: translateY(-1px);
 }
 
@@ -42,21 +43,20 @@
 }
 
 .ghost:hover:not(:disabled) {
-  border-color: var(--color-primary-container);
+  border-color: var(--color-primary);
   color: var(--color-primary);
-  background: rgba(255, 107, 53, 0.06);
+  background: var(--color-surface-container-low);
 }
 
 .secondary {
-  background: var(--color-glass-bg);
+  background: var(--color-surface);
   color: var(--color-text-primary);
   border: 1px solid var(--color-border);
-  backdrop-filter: blur(10px);
 }
 
 .secondary:hover:not(:disabled) {
-  border-color: rgba(255, 255, 255, 0.15);
-  background: var(--color-glass-hover);
+  border-color: var(--color-outline);
+  background: var(--color-surface-container-low);
 }
 
 .sm {

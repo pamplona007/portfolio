@@ -55,6 +55,11 @@
   color: var(--color-text-primary);
 }
 
+.header.scrolled .navLink:hover,
+.header.scrolled .navLink.active {
+  color: var(--color-primary);
+}
+
 .navLink.active::after {
   content: '';
   position: absolute;

@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/public/Button';
 import { Card } from '@/components/public/Card';
 import { SkillChip } from '@/components/public/SkillChip';
+import { TechLogo } from '@/components/public/TechLogo';
 import { useProfile } from '@/hooks/useProfile';
 import { useProjects } from '@/hooks/useProjects';
 import { useAboutData } from '@/hooks/useAboutData';
@@ -53,8 +54,8 @@ export default function Home() {
   // Featured projects - show first 3
   const featuredProjects = projects.slice(0, 3);
 
-  // Top skills - show first 6
-  const topSkills = skills.slice(0, 6);
+  // Top skills - all of them for the cloud
+  const topSkills = skills;
 
   return (
     <div className={styles.page}>
@@ -71,7 +72,7 @@ export default function Home() {
 
               {/* Name — large typographic impact */}
               <h1 className={styles.name}>
-                <span className="gradient-text">{nameLine1}</span>
+                <span>{nameLine1}</span>
                 {nameLine2 && <span className={styles.nameLine2}>{nameLine2}</span>}
               </h1>
 
@@ -107,28 +108,28 @@ export default function Home() {
                   <Mail size={20} />
                 </a>
               </div>
-            </div>
 
-            {/* Decorative side panel */}
-            <div className={styles.heroDecor}>
-              <span className={styles.decorCode}>full-stack / devops / open-source</span>
-              <div className={styles.decorLine} />
-              <div className={styles.decorDots}>
-                <span className={styles.decorDot} />
-                <span className={styles.decorDot} />
-                <span className={styles.decorDot} />
-                <span className={styles.decorDot} />
-                <span className={styles.decorDot} />
-                <span className={styles.decorDot} />
+              {/* Scroll indicator */}
+              <div className={styles.scrollIndicator}>
+                <span className={styles.scrollText}>scroll</span>
+                <div className={styles.scrollLine} />
               </div>
             </div>
-          </div>
-        </div>
 
-        {/* Scroll indicator */}
-        <div className={styles.scrollIndicator}>
-          <span className={styles.scrollText}>scroll</span>
-          <div className={styles.scrollLine} />
+            {topSkills.length > 0 && (
+              <div className={styles.skillsCloud} aria-hidden="true">
+                {[...topSkills, ...topSkills].map((skill, i) => (
+                  <div
+                    key={`${skill.id}-${i}`}
+                    className={styles.cloudChip}
+                    style={{ animationDelay: `${(i % topSkills.length) * 0.4}s` }}
+                  >
+                    <SkillChip name={getLocalized(skill.name, lang)} category={skill.category} />
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
       </section>
 
@@ -214,25 +215,16 @@ export default function Home() {
         </section>
       )}
 
-      {/* Skills teaser */}
-      {topSkills.length > 0 && (
-        <section className={styles.featuredSection} style={{ paddingTop: 0 }}>
-          <div className={styles.container}>
-            <div className={styles.featuredHeader}>
-              <div>
-                <span className={styles.featuredLabel}>Expertise</span>
-                <h2 className={styles.featuredTitle}>Skills & Tech</h2>
-              </div>
-              <Link to="/about">
-                <Button variant="ghost" size="sm">
-                  Full bio <ArrowRight size={14} />
-                </Button>
-              </Link>
-            </div>
-
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px' }}>
-              {topSkills.map((skill) => (
-                <SkillChip key={skill.id} name={getLocalized(skill.name, lang)} category={skill.category} />
+      {/* Tech Marquee */}
+      {skills.length > 0 && (
+        <section className={styles.marqueeSection}>
+          <div className={styles.marqueeOuter}>
+            <div className={styles.marqueeInner}>
+              {[...skills, ...skills].map((skill, i) => (
+                <div key={`${skill.id}-${i}`} className={styles.marqueeItem}>
+                  <TechLogo name={skill.name.en} category={skill.category} />
+                  <span className={styles.marqueeName}>{skill.name.en}</span>
+                </div>
               ))}
             </div>
           </div>
