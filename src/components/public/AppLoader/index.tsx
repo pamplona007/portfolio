@@ -4,8 +4,6 @@ import type { Profile, Project, Skill, Experience, Education } from '@/types';
 import { toCamelCase } from '@/utils/db';
 import styles from './styles.module.css';
 
-// ─── Types ────────────────────────────────────────────────────────────────────
-
 export interface PreloadedData {
   profile: Profile | null;
   projects: Project[];
@@ -16,8 +14,6 @@ export interface PreloadedData {
 }
 
 interface AppDataContextValue extends PreloadedData {}
-
-// ─── Context ──────────────────────────────────────────────────────────────────
 
 const AppDataContext = createContext<AppDataContextValue>({
   profile: null,
@@ -32,14 +28,25 @@ export function useAppData() {
   return useContext(AppDataContext);
 }
 
-// ─── AppLoader ────────────────────────────────────────────────────────────────
+type Phase = 'loading' | 'exiting' | 'done';
 
 interface AppLoaderProps {
   children: React.ReactNode;
 }
 
+function preloadImage(src: string): Promise<void> {
+  return new Promise((resolve) => {
+    const img = new Image();
+    img.onload = () => resolve();
+    img.onerror = () => resolve();
+    img.src = src;
+  });
+}
+
 export function AppLoader({ children }: AppLoaderProps) {
   const [data, setData] = useState<PreloadedData | null>(null);
+  const [phase, setPhase] = useState<Phase>('loading');
+  const [pageVisible, setPageVisible] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -51,18 +58,39 @@ export function AppLoader({ children }: AppLoaderProps) {
         supabase.from('skills').select('*'),
         supabase.from('experience').select('*').order('sortOrder'),
         supabase.from('education').select('*'),
+        document.fonts.ready,
       ]);
+
+      if (cancelled) return;
+
+      const loadedProjects = (projectsRes.data ?? []) as Project[];
+
+      const imageUrls = loadedProjects.flatMap((p): string[] => {
+        const urls: string[] = [];
+        if (p.coverImageUrl) urls.push(p.coverImageUrl);
+        if (p.screenshots[0]) urls.push(p.screenshots[0]);
+        return urls;
+      });
+
+      await Promise.all(imageUrls.map(preloadImage));
 
       if (cancelled) return;
 
       setData({
         profile: profileRes.data ? (toCamelCase(profileRes.data) as Profile) : null,
-        projects: (projectsRes.data ?? []) as Project[],
+        projects: loadedProjects,
         skills: (skillsRes.data ?? []) as Skill[],
         experiences: (expRes.data ?? []) as Experience[],
         education: (eduRes.data ?? []) as Education[],
         isLoaded: true,
       });
+
+      setPhase('exiting');
+
+      setTimeout(() => {
+        setPageVisible(true);
+        setPhase('done');
+      }, 300);
     }
 
     preload();
@@ -72,46 +100,53 @@ export function AppLoader({ children }: AppLoaderProps) {
     };
   }, []);
 
-  // Render loading screen until data is ready
-  if (!data) {
-    return <LoaderScreen />;
-  }
-
   return (
-    <AppDataContext.Provider value={data}>
-      {children}
+    <AppDataContext.Provider value={data ?? {
+      profile: null,
+      projects: [],
+      skills: [],
+      experiences: [],
+      education: [],
+      isLoaded: false,
+    }}>
+      <div
+        className={`${styles.loaderWrapper} ${phase === 'done' ? styles.loaderHidden : ''} ${phase === 'exiting' ? styles.loaderExiting : ''}`}
+        aria-hidden={phase === 'done'}
+      >
+        <LoaderScreen />
+      </div>
+
+      <div className={`${styles.pageWrapper} ${pageVisible ? styles.pageVisible : ''}`}>
+        {children}
+      </div>
     </AppDataContext.Provider>
   );
 }
 
-// ─── Hooks backed by preloaded context ───────────────────────────────────────
-
 export function useProfileData() {
-  const { profile } = useAppData();
-  return profile;
+  const data = useAppData();
+  return data.profile;
 }
 
 export function useProjectsData() {
-  const { projects } = useAppData();
-  return projects;
+  const data = useAppData();
+  return data.projects;
 }
 
 export function useSkillsData() {
-  const { skills } = useAppData();
-  return skills;
+  const data = useAppData();
+  return data.skills;
 }
 
 export function useExperiencesData() {
-  const { experiences } = useAppData();
-  return experiences;
+  const data = useAppData();
+  return data.experiences;
 }
 
 export function useEducationData() {
-  const { education } = useAppData();
-  return education;
+  const data = useAppData();
+  return data.education;
 }
-
-// ─── Loader Screen ────────────────────────────────────────────────────────────
 
 function LoaderScreen() {
   const [tick, setTick] = useState(0);
@@ -121,7 +156,6 @@ function LoaderScreen() {
     return () => clearInterval(id);
   }, []);
 
-  // Pulsing dots animation
   const dotCount = 3;
   const activeDots = Math.floor((tick % 20) / 7);
 

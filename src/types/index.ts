@@ -67,6 +67,7 @@ export interface Project {
   slug: string;
   description: LocalizedString;
   techStack: string[];
+  coverImageUrl: string | null;
   liveUrl: string | null;
   repoUrl: string | null;
   screenshots: string[];

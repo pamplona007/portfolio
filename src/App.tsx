@@ -1,6 +1,7 @@
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { ProtectedRoute } from './components/admin/ProtectedRoute';
+import { AppLoader } from './components/public/AppLoader';
 
 // Public pages (lazy loaded)
 const Home = React.lazy(() => import('./pages/public/Home'));
@@ -23,34 +24,34 @@ import { DashboardLayout } from './components/admin/DashboardLayout';
 
 export default function App() {
   return (
-    <React.Suspense fallback={null}>
-      <Routes>
-        {/* Public routes */}
-        <Route element={<PublicLayout />}>
-          <Route path="/" element={<Home />} />
-          <Route path="/about" element={<About />} />
-          <Route path="/projects" element={<Projects />} />
-          <Route path="/contact" element={<Contact />} />
-        </Route>
+    <AppLoader>
+      <React.Suspense fallback={null}>
+        <Routes>
+          <Route element={<PublicLayout />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/projects" element={<Projects />} />
+            <Route path="/contact" element={<Contact />} />
+          </Route>
 
-        {/* Admin routes */}
-        <Route path="/dashboard/login" element={<Login />} />
-        <Route
-          path="/dashboard"
-          element={
-            <ProtectedRoute>
-              <DashboardLayout />
-            </ProtectedRoute>
-          }
-        >
-          <Route index element={<Dashboard />} />
-          <Route path="about" element={<AboutEditor />} />
-          <Route path="projects" element={<ProjectsEditor />} />
-          <Route path="contact" element={<ContactSubmissions />} />
-          <Route path="settings" element={<Settings />} />
-          <Route path="skills" element={<SkillsEditor />} />
-        </Route>
-      </Routes>
-    </React.Suspense>
+          <Route path="/dashboard/login" element={<Login />} />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <DashboardLayout />
+              </ProtectedRoute>
+            }
+          >
+            <Route index element={<Dashboard />} />
+            <Route path="about" element={<AboutEditor />} />
+            <Route path="projects" element={<ProjectsEditor />} />
+            <Route path="contact" element={<ContactSubmissions />} />
+            <Route path="settings" element={<Settings />} />
+            <Route path="skills" element={<SkillsEditor />} />
+          </Route>
+        </Routes>
+      </React.Suspense>
+    </AppLoader>
   );
 }
