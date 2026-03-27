@@ -21,23 +21,9 @@ const SkillsEditor = React.lazy(() => import('./components/admin/SkillsEditor'))
 import { PublicLayout } from './components/public/Layout';
 import { DashboardLayout } from './components/admin/DashboardLayout';
 
-function LoadingFallback() {
-  return (
-    <div style={{
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      minHeight: '100vh',
-      color: 'var(--color-text-secondary)'
-    }}>
-      Loading...
-    </div>
-  );
-}
-
 export default function App() {
   return (
-    <React.Suspense fallback={<LoadingFallback />}>
+    <React.Suspense fallback={null}>
       <Routes>
         {/* Public routes */}
         <Route element={<PublicLayout />}>

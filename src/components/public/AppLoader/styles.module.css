@@ -1,0 +1,243 @@
+/* ─── Loader Screen ─── */
+.screen {
+  position: fixed;
+  inset: 0;
+  background: var(--color-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  overflow: hidden;
+}
+
+/* ─── Animated Orbs ─── */
+.orbContainer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.orb {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0;
+  animation: orbReveal 2s ease-out forwards;
+}
+
+.orb1 {
+  width: 420px;
+  height: 420px;
+  background: radial-gradient(circle, rgba(184, 92, 56, 0.12) 0%, transparent 70%);
+  top: -15%;
+  right: -10%;
+  animation-delay: 200ms;
+}
+
+.orb2 {
+  width: 320px;
+  height: 320px;
+  background: radial-gradient(circle, rgba(122, 140, 122, 0.1) 0%, transparent 70%);
+  bottom: -5%;
+  left: -8%;
+  animation-delay: 400ms;
+}
+
+.orb3 {
+  width: 240px;
+  height: 240px;
+  background: radial-gradient(circle, rgba(184, 92, 56, 0.08) 0%, transparent 70%);
+  top: 40%;
+  left: 30%;
+  animation-delay: 600ms;
+}
+
+@keyframes orbReveal {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ─── Grain Overlay ─── */
+.grain {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+}
+
+/* ─── Content ─── */
+.content {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-5);
+  animation: contentFadeIn 600ms ease-out 100ms both;
+}
+
+@keyframes contentFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ─── Monogram Mark ─── */
+.mark {
+  display: flex;
+  gap: 3px;
+  margin-bottom: var(--space-1);
+}
+
+.markChar {
+  font-family: var(--font-display);
+  font-size: 2.5rem;
+  font-weight: 600;
+  color: var(--color-text-primary);
+  letter-spacing: -0.02em;
+  line-height: 1;
+  opacity: 0;
+  transform: translateY(8px) rotateX(20deg);
+  animation: charReveal 500ms cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes charReveal {
+  to {
+    opacity: 1;
+    transform: translateY(0) rotateX(0deg);
+  }
+}
+
+/* ─── Name ─── */
+.name {
+  font-family: var(--font-mono);
+  font-size: 0.625rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  color: var(--color-text-muted);
+  opacity: 0;
+  animation: nameFade 400ms ease-out 300ms forwards;
+}
+
+@keyframes nameFade {
+  to {
+    opacity: 1;
+  }
+}
+
+/* ─── Progress Bar ─── */
+.progressTrack {
+  width: 120px;
+  height: 1px;
+  background: var(--color-border);
+  border-radius: 1px;
+  overflow: hidden;
+  position: relative;
+}
+
+.progressBar {
+  position: absolute;
+  inset: 0;
+  background: var(--color-primary);
+  border-radius: 1px;
+  transform-origin: left center;
+  animation: progressPulse 1.4s ease-in-out infinite;
+}
+
+@keyframes progressPulse {
+  0% {
+    transform: translateX(-100%) scaleX(0.3);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translateX(50%) scaleX(0.5);
+    opacity: 1;
+  }
+  100% {
+    transform: translateX(200%) scaleX(0.3);
+    opacity: 0.6;
+  }
+}
+
+/* ─── Progress Text ─── */
+.progressText {
+  font-family: var(--font-mono);
+  font-size: 0.5625rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--color-text-muted);
+  height: 14px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  opacity: 0;
+  animation: nameFade 400ms ease-out 450ms forwards;
+}
+
+.dot {
+  display: inline-block;
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: var(--color-primary);
+  transition: opacity 200ms ease;
+}
+
+.loadingLabel {
+  margin-left: 4px;
+  animation: textBlink 1.4s ease-in-out infinite;
+}
+
+@keyframes textBlink {
+  0%, 100% { opacity: 0.5; }
+  50% { opacity: 1; }
+}
+
+/* ─── Corner Decorations ─── */
+.cornerTL,
+.cornerBR {
+  position: absolute;
+  width: 32px;
+  height: 32px;
+  opacity: 0;
+  animation: cornerReveal 600ms ease-out 500ms forwards;
+}
+
+.cornerTL {
+  top: var(--space-8);
+  left: var(--space-8);
+  border-top: 1px solid var(--color-outline);
+  border-left: 1px solid var(--color-outline);
+}
+
+.cornerBR {
+  bottom: var(--space-8);
+  right: var(--space-8);
+  border-bottom: 1px solid var(--color-outline);
+  border-right: 1px solid var(--color-outline);
+}
+
+@keyframes cornerReveal {
+  from {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  to {
+    opacity: 0.5;
+    transform: scale(1);
+  }
+}
