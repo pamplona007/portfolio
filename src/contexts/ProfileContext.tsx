@@ -1,6 +1,7 @@
 import { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
 import { supabase } from '@/services/supabase';
 import type { Profile } from '@/types';
+import { toCamelCase } from '@/utils/db';
 
 interface ProfileContextValue {
   profile: Profile | null;
@@ -26,7 +27,7 @@ export function ProfileProvider({ children }: { children: ReactNode }) {
       .single()
       .then(({ data, error }) => {
         if (error) setError(error.message);
-        else setProfile(data);
+        else setProfile(toCamelCase(data) as Profile);
         setLoading(false);
       });
   }, []);

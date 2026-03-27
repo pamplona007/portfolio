@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -11,18 +11,18 @@ import { trackPageView } from '@/services/analytics';
 import styles from './styles.module.css';
 
 function useScrollReveal() {
-  const ref = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { el.classList.add('visible'); obs.disconnect(); } },
-      { threshold: 0.1 }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
+  const ref = useRef<HTMLDivElement | null>(null);
+  const setRef = useCallback((el: HTMLDivElement | null) => {
+    if (el && !ref.current) {
+      ref.current = el;
+      const obs = new IntersectionObserver(
+        ([entry]) => { if (entry.isIntersecting) { el.classList.add('visible'); obs.disconnect(); } },
+        { threshold: 0.1 }
+      );
+      obs.observe(el);
+    }
   }, []);
-  return ref;
+  return setRef;
 }
 
 const contactSchema = z.object({

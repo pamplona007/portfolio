@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useCallback } from 'react';
 import { Briefcase, GraduationCap, Code } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { SkillChip } from '@/components/public/SkillChip';
@@ -8,18 +8,18 @@ import { getLocalized } from '@/types';
 import styles from './styles.module.css';
 
 function useScrollReveal() {
-  const ref = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { el.classList.add('visible'); obs.disconnect(); } },
-      { threshold: 0.1 }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
+  const ref = useRef<HTMLDivElement | null>(null);
+  const setRef = useCallback((el: HTMLDivElement | null) => {
+    if (el && !ref.current) {
+      ref.current = el;
+      const obs = new IntersectionObserver(
+        ([entry]) => { if (entry.isIntersecting) { el.classList.add('visible'); obs.disconnect(); } },
+        { threshold: 0.1 }
+      );
+      obs.observe(el);
+    }
   }, []);
-  return ref;
+  return setRef;
 }
 
 export default function About() {
@@ -29,6 +29,7 @@ export default function About() {
   const headerRef = useScrollReveal();
   const skillsRef = useScrollReveal();
   const expRef = useScrollReveal();
+  const eduRef = useScrollReveal();
 
   useEffect(() => {
     trackPageView('/about');
@@ -102,7 +103,7 @@ export default function About() {
 
         {/* Education */}
         {education.length > 0 && (
-          <section className={`${styles.section} reveal`}>
+          <section ref={eduRef} className={`${styles.section} reveal`}>
             <h2 className={styles.sectionTitle}>
               <GraduationCap size={18} />
               {t('about.education')}

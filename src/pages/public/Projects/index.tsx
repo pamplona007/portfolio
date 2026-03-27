@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { ExternalLink, Github } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { Card } from '@/components/public/Card';
@@ -10,18 +10,18 @@ import { getLocalized } from '@/types';
 import styles from './styles.module.css';
 
 function useScrollReveal() {
-  const ref = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const obs = new IntersectionObserver(
-      ([entry]) => { if (entry.isIntersecting) { el.classList.add('visible'); obs.disconnect(); } },
-      { threshold: 0.1 }
-    );
-    obs.observe(el);
-    return () => obs.disconnect();
+  const ref = useRef<HTMLDivElement | null>(null);
+  const setRef = useCallback((el: HTMLDivElement | null) => {
+    if (el && !ref.current) {
+      ref.current = el;
+      const obs = new IntersectionObserver(
+        ([entry]) => { if (entry.isIntersecting) { el.classList.add('visible'); obs.disconnect(); } },
+        { threshold: 0.1 }
+      );
+      obs.observe(el);
+    }
   }, []);
-  return ref;
+  return setRef;
 }
 
 export default function Projects() {
