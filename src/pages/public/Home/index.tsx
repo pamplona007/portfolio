@@ -48,7 +48,7 @@ export default function Home() {
   const stats = [
     { number: `${profile?.yearsExperience ?? 0}+`, label: t('home.yearsExp') },
     { number: `${profile?.projectsDelivered ?? 0}+`, label: t('home.projectsDelivered') },
-    { number: `${profile?.yearsAtCompany ?? 0}+`, label: t('home.yearsAtWeavel') },
+    { number: `${profile?.yearsAtCompany ?? 0}+`, label: t('home.yearsAtElse') },
   ];
 
   // Featured projects - show first 3

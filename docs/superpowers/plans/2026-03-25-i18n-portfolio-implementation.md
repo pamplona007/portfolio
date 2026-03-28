@@ -77,7 +77,7 @@ Create `public/locales/en/common.json`:
     "getInTouch": "Get in Touch",
     "yearsExp": "Years Experience",
     "projectsDelivered": "Projects Delivered",
-    "yearsAtWeavel": "Years at Weavel"
+    "yearsAtElse": "Years at Else"
   },
   "about": {
     "skills": "Skills",
@@ -130,7 +130,7 @@ Create `public/locales/pt/common.json` — same keys with PT values:
     "getInTouch": "Entre em Contato",
     "yearsExp": "Anos de Experiência",
     "projectsDelivered": "Projetos Entregues",
-    "yearsAtWeavel": "Anos na Weavel"
+    "yearsAtElse": "Anos na Else"
   },
   "about": {
     "skills": "Habilidades",

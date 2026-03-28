@@ -123,31 +123,6 @@ export function AppLoader({ children }: AppLoaderProps) {
   );
 }
 
-export function useProfileData() {
-  const data = useAppData();
-  return data.profile;
-}
-
-export function useProjectsData() {
-  const data = useAppData();
-  return data.projects;
-}
-
-export function useSkillsData() {
-  const data = useAppData();
-  return data.skills;
-}
-
-export function useExperiencesData() {
-  const data = useAppData();
-  return data.experiences;
-}
-
-export function useEducationData() {
-  const data = useAppData();
-  return data.education;
-}
-
 function LoaderScreen() {
   const [tick, setTick] = useState(0);
 
