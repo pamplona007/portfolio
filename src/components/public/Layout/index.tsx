@@ -3,6 +3,7 @@ import { Header } from '../Header';
 import { Footer } from '../Footer';
 import { BackgroundEffects } from '../BackgroundEffects';
 import styles from './styles.module.css';
+import { Suspense } from 'react';
 
 export function PublicLayout() {
   return (
@@ -10,7 +11,9 @@ export function PublicLayout() {
       <BackgroundEffects />
       <Header />
       <main className={styles.main}>
-        <Outlet />
+        <Suspense>
+          <Outlet />
+        </Suspense>
       </main>
       <Footer />
     </div>

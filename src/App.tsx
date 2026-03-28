@@ -25,7 +25,6 @@ import { DashboardLayout } from './components/admin/DashboardLayout';
 export default function App() {
   return (
     <AppLoader>
-      <React.Suspense fallback={null}>
         <Routes>
           <Route element={<PublicLayout />}>
             <Route path="/" element={<Home />} />
@@ -51,7 +50,6 @@ export default function App() {
             <Route path="skills" element={<SkillsEditor />} />
           </Route>
         </Routes>
-      </React.Suspense>
     </AppLoader>
   );
 }
