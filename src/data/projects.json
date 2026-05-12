@@ -1,0 +1,62 @@
+[
+  {
+    "title": { "en": "MecaPlanning Ecosystem", "pt": "Ecossistema MecaPlanning" },
+    "slug": "mecaplanning",
+    "description": {
+      "en": "A complete software ecosystem for automotive workshops. Manage clients, auto-calculate prices, deadlines, communications, and send alerts for vehicle recalls and additional services.",
+      "pt": "Uma coleção de softwares para oficinas mecânicas. Gerenciamento de clientes, preços automáticos, prazos, comunicações e alertas de recalls."
+    },
+    "techStack": ["ReactJS", "TypeScript", "Node.js", "PostgreSQL"],
+    "coverImageUrl": null,
+    "liveUrl": null,
+    "repoUrl": null,
+    "screenshots": [],
+    "status": "active",
+    "sortOrder": 0
+  },
+  {
+    "title": { "en": "Pinheiro Distribution Center", "pt": "Centro de Distribuição Pinheiro" },
+    "slug": "pinheiro",
+    "description": {
+      "en": "A logistics solution for a major supermarket franchise in Fortaleza. Reduced order processing time by 60% using a React Native app and ReactJS web dashboard.",
+      "pt": "Solução logística para uma grande franquia de supermercados em Fortaleza. Reduziu o tempo de processamento de pedidos em 60% com React Native e ReactJS."
+    },
+    "techStack": ["ReactJS", "React Native", "TypeScript", "Node.js"],
+    "coverImageUrl": null,
+    "liveUrl": null,
+    "repoUrl": null,
+    "screenshots": [],
+    "status": "active",
+    "sortOrder": 1
+  },
+  {
+    "title": { "en": "Vonixx Manufacturing", "pt": "Fabricação Vonixx" },
+    "slug": "vonixx",
+    "description": {
+      "en": "Web system for remote production management at a vehicle products manufacturer in Fortaleza. Tasks can be directed remotely with all necessary information available to factory workers.",
+      "pt": "Sistema web para gerenciamento remoto da produção em fabricante de produtos para veículos em Fortaleza. Tarefas direcionadas remotamente."
+    },
+    "techStack": ["ReactJS", "TypeScript"],
+    "coverImageUrl": null,
+    "liveUrl": null,
+    "repoUrl": null,
+    "screenshots": [],
+    "status": "active",
+    "sortOrder": 2
+  },
+  {
+    "title": { "en": "Browser Extension", "pt": "Extensão de Navegador" },
+    "slug": "browser-extension",
+    "description": {
+      "en": "A browser extension with over 6,000 daily active users. Built with ReactJS and TypeScript.",
+      "pt": "Extensão de navegador com mais de 6.000 usuários diários ativos. Desenvolvida com ReactJS e TypeScript."
+    },
+    "techStack": ["ReactJS", "TypeScript"],
+    "coverImageUrl": null,
+    "liveUrl": null,
+    "repoUrl": null,
+    "screenshots": [],
+    "status": "active",
+    "sortOrder": 3
+  }
+]

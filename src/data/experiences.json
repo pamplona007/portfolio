@@ -1,0 +1,62 @@
+[
+  {
+    "company": { "en": "Else Consultoria", "pt": "Else Consultoria" },
+    "role": { "en": "Full Stack Web Developer", "pt": "Desenvolvedor Web Full Stack" },
+    "startDate": "2022-01",
+    "endDate": null,
+    "current": true,
+    "description": {
+      "en": "Lead development of ReactJS and TypeScript applications. Developed a browser extension with over 6,000 daily users. Optimized automated tests, reducing CI/CD pipeline execution time by 60%.",
+      "pt": "Lidero o desenvolvimento e manutenção de aplicações ReactJS e TypeScript. Desenvolvi uma extensão de navegador com mais de 6.000 usuários diários. Otimizei testes automatizados, reduzindo tempo de execução de pipelines em 60%."
+    },
+    "sortOrder": 0
+  },
+  {
+    "company": { "en": "Youth Space", "pt": "Youth Space" },
+    "role": { "en": "Teacher", "pt": "Professor" },
+    "startDate": "2025-03",
+    "endDate": null,
+    "current": true,
+    "description": {
+      "en": "Teaching JavaScript and Python courses. First in-person React Native teacher in the state of Ceará.",
+      "pt": "Ministro aulas de JavaScript e Python. Professor do primeiro curso presencial de React Native no estado do Ceará."
+    },
+    "sortOrder": 1
+  },
+  {
+    "company": { "en": "Digital College Brasil", "pt": "Digital College Brasil" },
+    "role": { "en": "Mentor", "pt": "Mentor" },
+    "startDate": "2024-03",
+    "endDate": "2025-02",
+    "current": false,
+    "description": {
+      "en": "Mentored professionals and students in HTML, CSS, JavaScript, ReactJS, and Node.js. Taught over 50 students.",
+      "pt": "Mentorei profissionais e estudantes em HTML, CSS, JavaScript, ReactJS e Node.js. Já ensinei mais de 50 alunos."
+    },
+    "sortOrder": 2
+  },
+  {
+    "company": { "en": "Ask Technology", "pt": "Ask Technology" },
+    "role": { "en": "Tech Leader & Full Stack Developer", "pt": "Tech Leader e Desenvolvedor Full Stack" },
+    "startDate": "2023-02",
+    "endDate": "2024-02",
+    "current": false,
+    "description": {
+      "en": "Technical leadership and guidance to the development team. Developed web and mobile applications using ReactJS, React Native, and TypeScript. Managed complete project development ensuring 100% on-time delivery.",
+      "pt": "Proporcionei liderança técnica e orientação à equipe de desenvolvimento. Desenvolvi aplicações web e mobile utilizando ReactJS, React Native e TypeScript. Gerenciei o desenvolvimento completo de projetos, assegurando entrega pontual em 100% dos contratos."
+    },
+    "sortOrder": 3
+  },
+  {
+    "company": { "en": "Darkmira Brasil", "pt": "Darkmira Brasil" },
+    "role": { "en": "Full Stack Web Developer", "pt": "Desenvolvedor Web Full Stack" },
+    "startDate": "2020-12",
+    "endDate": "2022-01",
+    "current": false,
+    "description": {
+      "en": "Contributed to personalized digital solutions for various clients. Used ReactJS and TypeScript for UI development. Built robust and scalable applications using Symfony, PostgreSQL, and Docker.",
+      "pt": "Contribuí para o desenvolvimento de soluções digitais personalizadas para diversos clientes. Utilizei ReactJS e TypeScript para criar interfaces. Construí aplicações robustas e escaláveis utilizando Symfony, PostgreSQL e Docker."
+    },
+    "sortOrder": 4
+  }
+]

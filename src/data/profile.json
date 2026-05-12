@@ -1,0 +1,20 @@
+{
+  "name": { "en": "Lucas Pamplona", "pt": "Lucas Pamplona" },
+  "title": { "en": "Senior Full Stack Developer", "pt": "Desenvolvedor Full Stack Sênior" },
+  "tagline": { "en": "Building digital experiences that matter", "pt": "Construindo experiências digitais que importam" },
+  "bio": {
+    "en": "I'm Lucas Pamplona, a senior full stack developer with 6 years of experience building web applications and leading technical teams. Specialist in ReactJS, TypeScript and Node.js, with a proven track record of delivering projects on time and solving complex problems with elegant solutions.\n\nMy journey started in 2020 at Darkmira Brasil, where I learned to build robust applications with Symfony, PostgreSQL and Docker. Later, at Ask Technology, I took on technical leadership of a team, coordinating the full development of B2B solutions with ReactJS, React Native and TypeScript — delivering 100% of contracts on time.\n\nIn 2024 I transitioned into education as a mentor at Digital College Brasil, where I taught over 50 students in full stack development courses. Today I combine working as a developer at Else Consultoria with teaching in-person JavaScript, Python and React Native classes at Youth Space — where I'm also pioneering the first in-person React Native course in the state of Ceará.\n\nOn a daily basis, I lead the development of several ReactJS and TypeScript applications, including a browser extension with over 6,000 daily active users. I'm driven by solving problems efficiently, without overcomplicating what can be simple.",
+    "pt": "Sou Lucas Pamplona, desenvolvedor full stack com 6 anos de experiência construindo aplicações web e liderando equipes técnicas. Especialista em ReactJS, TypeScript e Node.js, com histórico comprovado de entregar projetos no prazo e resolver problemas complexos com soluções elegantes.\n\nMinha trajetória começou em 2020 na Darkmira Brasil, onde aprendi a construir aplicações robustas com Symfony, PostgreSQL e Docker. Depois, na Ask Technology, assumi a liderança técnica de uma equipe, coordenando o desenvolvimento completo de soluções B2B com ReactJS, React Native e TypeScript — entregando 100% dos contratos no prazo.\n\nEm 2024 fiz a transição para educação como mentor na Digital College Brasil, onde ensinei mais de 50 alunos em cursos de desenvolvimento full stack. Hoje combina o trabalho como desenvolvedor na Else Consultoria com aulas presenciais de JavaScript, Python e React Native na Youth Space — onde também sou pioneiro no primeiro curso presencial de React Native do estado do Ceará.\n\nNo dia a dia, lidero o desenvolvimento de diversas aplicações ReactJS e TypeScript, incluindo uma extensão de navegador que já Alcança mais de 6.000 usuários diários. Sou movido por resolver problemas de forma eficiente, sem complicar o que pode ser simples."
+  },
+  "metaDescription": {
+    "en": "Senior Full Stack Developer in Fortaleza, Brazil.",
+    "pt": "Desenvolvedor Full Stack Sênior em Fortaleza, Brasil."
+  },
+  "socialGithub": "https://github.com/pamplona007",
+  "socialLinkedin": "https://linkedin.com/in/lucaspamplona",
+  "socialEmail": "pamplona.developer@gmail.com",
+  "theme": "dark",
+  "yearsExperience": 8,
+  "projectsDelivered": 50,
+  "yearsAtCompany": 4
+}

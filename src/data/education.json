@@ -1,0 +1,23 @@
+[
+  {
+    "school": { "en": "Descomplica", "pt": "Descomplica" },
+    "degree": { "en": "Bachelor's Degree", "pt": "Bacharelado" },
+    "field": { "en": "Computer Science", "pt": "Ciência da Computação" },
+    "startDate": "2025-01",
+    "endDate": null
+  },
+  {
+    "school": { "en": "IWTraining", "pt": "IWTraining" },
+    "degree": { "en": "Certificate", "pt": "Certificado" },
+    "field": { "en": "Front End Development", "pt": "Desenvolvimento Front End" },
+    "startDate": "2018-01",
+    "endDate": "2019-03"
+  },
+  {
+    "school": { "en": "Centro Universitário Estácio do Ceará", "pt": "Centro Universitário Estácio do Ceará" },
+    "degree": { "en": "Associate Degree", "pt": "Tecnólogo" },
+    "field": { "en": "Graphic Design", "pt": "Design Gráfico" },
+    "startDate": "2015-01",
+    "endDate": "2018-12"
+  }
+]

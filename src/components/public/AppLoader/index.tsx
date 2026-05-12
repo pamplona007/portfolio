@@ -1,7 +1,10 @@
 import { createContext, useContext, useEffect, useState } from 'react';
-import { supabase } from '@/services/supabase';
 import type { Profile, Project, Skill, Experience, Education } from '@/types';
-import { toCamelCase } from '@/utils/db';
+import profileData from '@/data/profile.json';
+import projectsData from '@/data/projects.json';
+import skillsData from '@/data/skills.json';
+import experiencesData from '@/data/experiences.json';
+import educationData from '@/data/education.json';
 import styles from './styles.module.css';
 
 export interface PreloadedData {
@@ -52,18 +55,7 @@ export function AppLoader({ children }: AppLoaderProps) {
     let cancelled = false;
 
     async function preload() {
-      const [profileRes, projectsRes, skillsRes, expRes, eduRes] = await Promise.all([
-        supabase.from('profile').select('*').single(),
-        supabase.from('projects').select('*').order('sortOrder'),
-        supabase.from('skills').select('*'),
-        supabase.from('experience').select('*').order('sortOrder'),
-        supabase.from('education').select('*'),
-        document.fonts.ready,
-      ]);
-
-      if (cancelled) return;
-
-      const loadedProjects = (projectsRes.data ?? []) as Project[];
+      const loadedProjects = projectsData as unknown as Project[];
 
       const imageUrls = loadedProjects.flatMap((p): string[] => {
         const urls: string[] = [];
@@ -77,11 +69,11 @@ export function AppLoader({ children }: AppLoaderProps) {
       if (cancelled) return;
 
       setData({
-        profile: profileRes.data ? (toCamelCase(profileRes.data) as Profile) : null,
+        profile: profileData as unknown as Profile,
         projects: loadedProjects,
-        skills: (skillsRes.data ?? []) as Skill[],
-        experiences: (expRes.data ?? []) as Experience[],
-        education: (eduRes.data ?? []) as Education[],
+        skills: skillsData as unknown as Skill[],
+        experiences: experiencesData as unknown as Experience[],
+        education: educationData as unknown as Education[],
         isLoaded: true,
       });
 

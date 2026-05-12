@@ -11,7 +11,7 @@ export function getLocalized(value: string | LocalizedString | null | undefined,
 
 // Profile
 export interface Profile {
-  id: string;
+  id?: string;
   name: LocalizedString;
   title: LocalizedString;
   tagline: LocalizedString | null;
@@ -23,15 +23,15 @@ export interface Profile {
   yearsExperience: number;
   projectsDelivered: number;
   yearsAtCompany: number;
-  language: string;
+  language?: string;
   theme: string;
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 // Experience
 export interface Experience {
-  id: string;
+  id?: string;
   company: LocalizedString;
   role: LocalizedString;
   startDate: string;
@@ -39,30 +39,30 @@ export interface Experience {
   current: boolean;
   description: LocalizedString | null;
   sortOrder: number;
-  createdAt: string;
+  createdAt?: string;
 }
 
 // Education
 export interface Education {
-  id: string;
+  id?: string;
   school: LocalizedString;
   degree: LocalizedString;
   field: LocalizedString;
   startDate: string;
   endDate: string | null;
-  createdAt: string;
+  createdAt?: string;
 }
 
 // Skill
 export interface Skill {
-  id: string;
+  id?: string;
   name: LocalizedString;
   category: 'frontend' | 'backend' | 'devops' | 'tools';
 }
 
 // Project
 export interface Project {
-  id: string;
+  id?: string;
   title: LocalizedString;
   slug: string;
   description: LocalizedString;
@@ -73,8 +73,8 @@ export interface Project {
   screenshots: string[];
   status: 'active' | 'inactive';
   sortOrder: number;
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 // Contact Submission

@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { supabase } from '@/services/supabase';
 
 interface ContactInput {
   name: string;
@@ -11,14 +10,13 @@ export function useContact() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  async function submitContact(data: ContactInput) {
+  async function submitContact(_data: ContactInput) {
     setLoading(true);
     setError(null);
     try {
-      const { error: submitError } = await supabase
-        .from('contact_submissions')
-        .insert([data]);
-      if (submitError) throw submitError;
+      // Simulate network delay
+      await new Promise(resolve => setTimeout(resolve, 500));
+      // No-op: contact form submissions are no longer stored
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : 'Failed to send message';
       setError(msg);
